@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock title%}
+{% block body %}
+
+<body>
+
+	<div class="container-fluid">
+	{% if categories %}
+
+	<div class="row d-block">
+		{% for category in categories %}
+	<a href="{{ url_for('home.shop_by_category', category_name=category.category_name) }}">
+		<div class="col l4 s12 m6" >
+			<div class="card-panel hoverable" style="max-height:270px; background-color:#FFFFFF;">
+					<div class="card-image" style="margin-left:auto;margin-right: auto;">
+							<img class="responsive-img" src="{{category.category_image}}"  >
+							<div class="caption">
+							<span class="card-title" style="margin-bottom:7px;">
+								<strong style="font-size:16px;font-family: 'Roboto', sans-serif;color: #000;">
+									{{ category.category_name }}
+								</strong>
+							</span>
+							</div>
+						</div>
+				</div>
+		</div>
+	</a>
+		{% endfor %}
+	</div>
+	{% endif %}
+	</div>
+</body>
+{% endblock %}

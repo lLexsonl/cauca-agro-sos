@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+
+{% block head %}
+
+{% endblock %}
+
+
+
+{% block body %}
+<h3>
+        Welcome to your profile page
+</h3>
+
+
+
+
+<nav>
+        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Profile</a>
+                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Orders</a>
+                <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Shipping</a>
+        </div>
+</nav>
+
+<div class="tab-content" id="nav-tabContent mb-5">
+<div class="tab-pane fade show active " id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+              
+                <ul class="list-group mt-4 center">
+                        <li class="list-group-item">{{current_user.firstname }}</li>
+                        <li class="list-group-item">{{current_user.lastname }}</li>
+                        <li class="list-group-item">{{ current_user.email }}</li>
+                        <li class="list-group-item">{{current_user.phonenumber }}</li>
+                </ul>
+
+
+</div>
+
+<div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+        <div class="center">
+                {% for orders in order%}
+                
+                <table class="table table-borderless">
+                        <caption style="text-align:center;">Orders as of  {{orders.timestamp.strftime('%d-%m-%Y,  %H:%M:%S')}}</caption>
+                        <thead>
+                                                        
+                          <tr>
+                            <th scope="col">Product Name</th>
+                            <th scope="col">Product Price</th>
+                            <!--<th scope="col">Product Quantity</th>-->
+                          </tr>
+                        </thead>
+                        <tbody>
+                        {%for i in orders.my_orders %}
+                        <tr>
+                            
+                            <td>{{ i.product_name }}</td>
+                            <td>{{i.product_price}}</td>
+                          </tr>
+                          {% endfor %}
+
+                        </tbody>
+                      </table>
+
+                {%endfor%}
+        </div>
+</div>
+
+<!-- shipping-->
+<div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+
+        {% if shipping == [] %}
+
+<div  class="container">
+        <div class="center">
+                
+        <form class="form" method="POST">
+                {{ form.hidden_tag() }}
+                <div class="form-group  required"><label class="control-label" for="Primary Address">{{ form.address1.label }}</label>
+                        {{ form.address1(class="form-control") }}                
+                </div>
+                <div class="form-group  required"><label class="control-label" for="Secondary Address">{{ form.address2.label }}</label>
+                        {{ form.address2(class="form-control") }}
+                </div>
+                <div class="form-group  required">
+                        <label class="control-label" for="Postal Code">
+                        {{ form.postcode.label }}
+                        </label>
+                        {{ form.postcode(class="form-control") }}
+                </div>
+
+                <div class="form-group  required">
+                        <label class="control-label" for="City">
+                        {{ form.city.label }}
+                        </label>
+                        {{ form.city(class="form-control") }}
+
+                                
+                </div>
+
+                <div class="form-group  required">
+                                <label class="control-label" for="State">
+                                {{ form.state.label }}
+                                </label>
+                                {{ form.state(class="form-control") }}
+                </div>
+
+                <div class="form-group  required">
+                        <label class="control-label" for="Country">Country </label>
+                        <select class="selectpicker countrypicker form-control"
+                                data-live-search="true"
+                                data-default="Nigeria"
+                                data-flag="true" name="country"> 
+                        </select>            
+                </div>
+
+                        
+                {{ form.submit(class="btn btn-primary")}}      
+        </form>
+
+                        
+
+        </div>
+</div>
+         {% else %}
+        <fieldset>
+                <legend>Shipping Details</legend>  
+                <ul class="list-group">
+                                {% for info in shipping %}
+                                <li class="list-group-item">{{info.address1}}</li>
+                                <li class="list-group-item">{{info.address2}}/li>
+                                <li class="list-group-item">{{info.postcode }}</li>
+                                <li class="list-group-item">{{info.city}}, {{info.state}}</li>
+                                <li class="list-group-item">{{ info.country }} </li>
+                                {% endfor %}
+                </ul>
+        </fieldset>
+                {% endif %}
+
+
+</div>
+
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock title%}
+{% block body %}
+{% if product_detail %}
+
+<div class="container-fluid clearfix" style="max-width:90%; margin-left: auto; margin-right: auto;">
+    <div class="float-left" style=" width:50%;">
+                <img  class="responsive-img" src="{{ product_detail.product_image }}">
+
+    </div>
+    <div class="float-right" style="width:48%;">
+        <div>
+                <span class="product-name">
+                        {{ product_detail.product_name }}
+                </span>
+                <h5 style="font-size:19px">
+                    Stock: <span style="color:forestgreen;">{{ product_detail.product_stock }}</span>
+                </h5>
+                <article>
+                        <h5 style="font-size: 19px;">
+                                Description of {{ product_detail.product_name }}
+                         </h6>
+                        <p style="font-size:15px;">
+                        <div class="product-description">
+                            {{product_detail.product_description }}
+                        </div>
+                        </p>
+                </article>
+                <section>
+                    <section>
+                        <form class="form-inline" method="POST">
+                            {{ form.hidden_tag() }}
+                            
+
+                        {% for subfield in form.sizes %}
+                        <div class="radio">
+                            <style>
+                                label
+                                {
+                                    margin-right: 5px;
+                                   font-size: 14px;
+                                    color:inherit;
+
+                                }
+                            </style>
+                                  {{ subfield }} 
+                                  {{ subfield.label }}  
+                        </div>
+                              
+                        {% endfor %}
+                    <div>
+                            {{ form.submit(class="btn btn-primary d-block")}}   
+                            <!-- change button and render form from forms.py -->
+                           
+                        </div>
+                  </section>
+                    
+                    </form>
+                </section>
+        </div>
+    </div>
+        
+</div>
+
+{% endif %}
+{% endblock %}
