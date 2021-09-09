@@ -1,6 +1,4 @@
-{% extends "base.html" %}
-{% block title %}Cauca Agro SOS{% endblock title%}
-{% block body %}
+{% block promo %}
   <!-- banner -->
 <div class="banner">
   <div class="xf">
@@ -28,7 +26,7 @@
     <a href="{{url_for('home.product_details',product_name = i.product_name)}}">
     <img src="{{i.product_image}}" class="d-block  carousel-img-height" alt="...">
     <div class="carousel-caption d-none d-md-block">
-      <h5>Featured Products</h5>
+      <h5>Producto en descuento</h5>
       <p>{{i.product_name}}</p>
     </div>
     </a>
