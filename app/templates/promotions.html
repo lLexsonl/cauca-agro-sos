@@ -10,7 +10,7 @@
       <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
       </ol>
     <div class="carousel-inner">
-    <div class="carousel-item active" style="min-height:480px;">
+    <div class="carousel-item active" style="max-width:100%;">
       <img src="{{url_for('static', filename='Oferta.png')}}" class="d-block carousel-img-height" alt="...">
     <div class="carousel-caption d-none d-md-block">
       <p>
@@ -22,7 +22,7 @@
                                             
 {% for i in products %}    
 {% if i.id in sorter %}
-  <div class="carousel-item" style="min-height:480px;">
+  <div class="carousel-item" style="max-width:100%;">
     <a href="{{url_for('home.product_details',product_name = i.product_name)}}">
     <img src="{{i.product_image}}" class="d-block  carousel-img-height" alt="...">
     <div class="carousel-caption d-none d-md-block">

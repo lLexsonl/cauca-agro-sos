@@ -49,28 +49,29 @@
 .carousel-caption p,.carousel-caption a{
   color:#fff;
   font-size: 1.1em;
-font-family: 'Cabin', sans-serif;
+  font-family: 'Cabin', sans-serif;
 }
 
 .xf {
-  width: 39%;
+  width: 100%;
   background: rgba(0, 0, 0, 0.59);
-  height: auto;
-  min-height: 500px;
+  /* height: auto; */
 }
 
 .banner{
     display: flex;
     justify-content: center;
-    min-height: 500px;
+    height: auto;
     background-size: auto auto;
     width: 100%;
     background-size: cover;
 }
 
 .carousel-img-height{
-  height: 350px;
-  width: auto;
+  max-height: 500px;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .brand_name .navbar-brand {
@@ -137,14 +138,14 @@ font-family: 'Cabin', sans-serif;
 
 @media screen and (max-width: 1020px) {
   /* mobile */
-  .xf{
+  .xf {
     width: 50%;
   }
 }
 
 @media screen and (max-width: 900px) {
   /* mobile */
-  .xf{
+  .xf {
     width: 45%;
   }
 
@@ -152,8 +153,8 @@ font-family: 'Cabin', sans-serif;
 
 @media screen and (max-width: 768px) {
   /* mobile */
-  .xf{
-    width: 55%;
+  .xf {
+    width: 100%;
   }
 }
 

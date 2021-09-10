@@ -11,7 +11,7 @@ import random
 home = Blueprint('home', __name__)
 
 
-@home.route('/admin/dashboard/')
+@home.route('/admin/dashboard/', methods=['GET'])
 @login_required
 def admin_dashboard():
     # preventing non admins from accessing the page
@@ -20,12 +20,12 @@ def admin_dashboard():
     return render_template('admin/admin_dashboard.html', title="Dashboard")
 
 
-@home.route('/')
+@home.route('/', methods=['GET'])
 def landing():
-    return redirect(url_for("home.home"))
+    return redirect(url_for("home.homepage"))
 
 
-@home.route('/home/')
+@home.route('/home')
 def homepage():
     ids = []
     c = Products.query.all()
@@ -49,7 +49,7 @@ def homepage():
                            categories=categories, products=products, count=count, sorter=sorter)
 
 
-@home.route('/<string:category_name>/')
+@home.route('/<string:category_name>')
 def shop_by_category(category_name):
     if current_user.is_anonymous:
 
@@ -72,7 +72,7 @@ def shop_by_category(category_name):
                            for_pagi=for_pagi)
 
 
-@home.route('/product/<string:product_name>/', methods=["GET", "POST"])
+@home.route('/product/<string:product_name>', methods=["GET", "POST"])
 def product_details(product_name):
     if current_user.is_anonymous:
         count = 0

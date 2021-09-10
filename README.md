@@ -2,11 +2,11 @@
 
 1. First step, activate virtual enviroment doing:
 
-In linux:
+In Linux:
 `source config.sh`
 
 In windows:
-TODO:
+*TODO*
 
 2. Then install all dependencies doing
 
@@ -15,7 +15,7 @@ Exist a problem with dependency **Werkzeug==2.0.1**.
 To solve this you need do:
 [solve](https://stackoverflow.com/questions/61628503/flask-uploads-importerror-cannot-import-name-secure-filename)
 
-In `flask_uploads.py`
+In `flask_uploads.py` imports
 
 Change
 
