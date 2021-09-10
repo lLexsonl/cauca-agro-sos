@@ -11,6 +11,7 @@ In windows:
 2. Then install all dependencies doing
 
 `pip install -r requirements.txt`
+
 Exist a problem with dependency **Werkzeug==2.0.1**.
 To solve this you need do:
 [solve](https://stackoverflow.com/questions/61628503/flask-uploads-importerror-cannot-import-name-secure-filename)

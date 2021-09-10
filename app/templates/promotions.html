@@ -20,7 +20,7 @@
     </div>
   </div>
                                             
-{% for i in products %}    
+{% for i in products %}
 {% if i.id in sorter %}
   <div class="carousel-item" style="max-width:100%;">
     <a href="{{url_for('home.product_details',product_name = i.product_name)}}">

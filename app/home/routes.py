@@ -11,7 +11,7 @@ import random
 home = Blueprint('home', __name__)
 
 
-@home.route('/admin/dashboard/', methods=['GET'])
+@home.route('/admin/dashboard', methods=['GET'])
 @login_required
 def admin_dashboard():
     # preventing non admins from accessing the page
@@ -25,10 +25,10 @@ def landing():
     return redirect(url_for("home.homepage"))
 
 
-@home.route('/home')
+@home.route('/home', methods=['GET'])
 def homepage():
     ids = []
-    c = Products.query.all()
+    c = Products.query.filter_by(promotion=True).all()
     for s in c:
         ids.append(s.id)
     sorter = []
