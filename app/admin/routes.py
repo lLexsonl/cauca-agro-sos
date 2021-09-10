@@ -134,7 +134,7 @@ def delete_category(id):
 '''
 
 
-@admin.route('/products')
+@admin.route('/products', methods=['GET'])
 @login_required
 def list_products():
     check_admin()
@@ -165,8 +165,10 @@ def add_product():
         url = photos.url(picture_fn)
         product = Products(product_name=form.name.data,
                            product_price=form.price.data, product_image=url,
-                           product_description=form.description.data, product_stock=form.stock.data)
+                           product_description=form.description.data, product_stock=form.stock.data,
+                           promotion=form.promotion.data, promotion_value=form.promotion_value.data)
         product.products_categories = form.categories.data
+
         try:
             # add a product to the database
             db.session.add(product)
@@ -180,6 +182,7 @@ def add_product():
         # redirect to the roles page
         return redirect(url_for('admin.list_products'))
     # load product template
+    print("Render")
     return render_template('admin/products/product.html', add_product=add_product,
                            form=form, title="Add Product")
 

@@ -97,8 +97,8 @@ class Products(db.Model):
     product_description = db.Column(db.String(200), index=True)
     product_stock = db.Column(db.Integer, index=True)
     product_size = db.Column(db.String(5), index=True)
-    promotion = db.Column(db.Boolean, index=True, nullable=True)
-    promotion_value = db.Column(db.Integer, index=True, nullable=True)
+    promotion = db.Column(db.Boolean, index=True, nullable=False)
+    promotion_value = db.Column(db.Integer, index=True, nullable=False)
     categories_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
 
     order = db.relationship(

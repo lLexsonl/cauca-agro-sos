@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import (StringField, SubmitField, TextAreaField, IntegerField,
-                     FloatField, validators, RadioField
+                     FloatField, validators, RadioField, BooleanField
                      )
 from wtforms.validators import DataRequired
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
@@ -28,6 +28,9 @@ class ProductsForm(FlaskForm):
     image = FileField('Product picture', validators=[FileRequired(),
                                                      FileAllowed(photos, "images only")])
     stock = IntegerField('Stock', [validators.DataRequired()])
+    promotion = BooleanField('Promotion', [validators.DataRequired()])
+    promotion_value = IntegerField(
+        'Promotion Value', [validators.DataRequired()])
     description = TextAreaField('Describe the product', [
                                 validators.DataRequired()])
     submit = SubmitField('Submit')
