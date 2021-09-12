@@ -1,4 +1,4 @@
-{% block categories %}
+{% block organizacion %}
 
 <!-- TODO: Arreglar overflow-auto en pantallas pequenas -->
 <div class="container mt-1 mb-3 overflow-auto">
@@ -8,13 +8,13 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav d-flex justify-content-around">
         <li class="nav-item active">
-          <a class="nav-link" href="{{ url_for('home.shop_by_category', category_name = "Canasta") }}">Canasta</a>
+          <a class="nav-link" href="{{ url_for('home.shop_by_category', category_name= "Canasta") }}">Canasta</a>
         </li>
         <li class="nav-item active">
-          <a class="nav-link" href="{{ url_for('home.shop_by_category', category_name = "Organizaciones") }}">Organizaciones</a>
+          <a class="nav-link" href="{{ url_for('home.shop_by_category', category_name= "Organizaciones") }}">Organizaciones</a>
         </li>
         <li class="nav-item active">
-          <a class="nav-link" href="{{ url_for('home.shop_by_category', category_name = "Inversionistas") }}">Inversionistas</a>
+          <a class="nav-link" href="{{ url_for('home.shop_by_category', category_name= "Inversionistas") }}">Inversionistas</a>
         </li>
         <li class="nav-item active">
           <a class="nav-link" href="#">Eventos</a>
