@@ -1,24 +1,44 @@
 # A simple e-commerce website
 
-1. First step, activate virtual enviroment doing:
+1. First step, create virtual environment doing:
+
+`python3 -m venv venv`
+
+2. Now activate the virtual environment doing:
 
 In Linux:
-`source config.sh`
+
+For bash/zsh
+
+`source config.sh` or `source ./venv/bin/activate`
 
 In windows:
-*TODO*
 
-2. Then install all dependencies doing
+For cmd: 
+`.\<venv>\Scripts\activate.bat`
+
+For PowerShell: 
+`.\<venv>\Scripts\Activate.ps1`
+
+For more info: [venv](https://docs.python.org/es/3.8/library/venv.html)
+
+3. Then install all dependencies doing
 
 `pip install -r requirements.txt`
 
-Exist a problem with dependency **Werkzeug==2.0.1**.
+If try to do `flask run` show a error related with dependency **Werkzeug==2.0.1**.
+
 To solve this you need do:
 [solve](https://stackoverflow.com/questions/61628503/flask-uploads-importerror-cannot-import-name-secure-filename)
 
-In `flask_uploads.py` imports
+Search `flask_uploads.py` file.
 
-Change
+If use virtual an environment search the file in this possible options:
+
+`venv/lib/site-packages/flask_uploads.py` or
+`venv/lib/python3.X/site-packages/flask_uploads.py`
+
+Now in imports change
 
 `from werkzeug import secure_filename,FileStorage`
 
@@ -28,12 +48,7 @@ to
 from werkzeug.utils import secure_filename
 from werkzeug.datastructures import  FileStorage
 ```
-
-If use virtual an environment search the file in this possible options:
-`venv/lib/site-packages/flask_uploads.py`
-`venv/lib/python3.X/site-packages/flask_uploads.py`
-
-3. Now we can start the app
+4. Now can start the app doing
 `flask run`
 
 # For login as admin

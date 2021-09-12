@@ -43,24 +43,24 @@
 	<a href="{{ url_for('home.product_details', product_name = product_list.product_name ) }}">
         <div class="col l4 s12 m6">
 			<div class="card-panel hoverable" style="max-height:360px; background-color:#FFFFFF;">    
-                <div class="card-image" style="margin-left:auto;margin-right: auto;">
-                        <div class="thumbnail" style="height:220px;margin-bottom: 0px;">
-                            <img class="responsive-img" src="{{ product_list.product_image }}" style="height:100%;">
-                        </div>
-                        <h6 class="title">
-                            <span class="product-name">
-                                {{ product_list.product_name }}            
-                            </span>
-                        </h6>
-                        <div class="price-container clearfix">
-                            <span class="price-box" style="margin-bottom:0px;white-space:normal;">
-                                <span class="price">
-                                    <span>₦</span>
-                                    <span>{{ product_list.product_price }}</span>
-                                </span>
-                                
-                            </span>
-                        </div>
+        <div class="card-image" style="margin-left:auto;margin-right: auto;">
+          <div class="thumbnail" style="height:220px;margin-bottom: 0px;">
+              <img class="responsive-img" src="{{ product_list.product_image }}" style="height:100%;">
+          </div>
+          <h6 class="title">
+              <span class="product-name">
+                  {{ product_list.product_name }}            
+              </span>
+          </h6>
+          <div class="price-container clearfix">
+              <span class="price-box" style="margin-bottom:0px;white-space:normal;">
+                  <span class="price">
+                      <span>₦</span>
+                      <span>{{ product_list.product_price }}</span>
+                  </span>
+                  
+              </span>
+          </div>
 				</div>
 			</div>
 		</div>
