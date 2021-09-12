@@ -5,7 +5,7 @@ from flask import (render_template, request, redirect, url_for, session,
 
 from flask_login import current_user, login_required
 
-from app.models import User, Categories, Products, Kart
+from app.models import Users, Organizaciones, Products, Kart
 from app.admin.forms import Variations
 import random
 home = Blueprint('home', __name__)
@@ -37,7 +37,7 @@ def homepage():
         if i in ids:
             sorter.append(i)
 
-    categories = Categories.query.all()
+    categories = Organizaciones.query.all()
     products = Products.query.all()
 
     if current_user.is_anonymous:
@@ -59,16 +59,16 @@ def shop_by_category(category_name):
 
     page = request.args.get('page', 1, type=int)
 
-    category = Categories.query.filter_by(
+    category = Organizaciones.query.filter_by(
         category_name=category_name).first_or_404()
 
     product = Products.query.filter_by(categories_id=category.id)\
         .order_by(Products.product_name).paginate(page=page, per_page=6)
 
-    for_pagi = Categories.query.filter_by(
-        category_name=Categories.category_name).first_or_404()
+    for_pagi = Organizaciones.query.filter_by(
+        category_name=Organizaciones.category_name).first_or_404()
     return render_template("home/shop_by_category.html", category=category,
-                           product=product, title="Category: " + category.category_name, count=count,
+                           product=product, title="Oranizacion: " + category.category_name, count=count,
                            for_pagi=for_pagi)
 
 

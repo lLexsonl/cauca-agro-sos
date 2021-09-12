@@ -3,7 +3,7 @@ from flask import (render_template, request, redirect, url_for, session,
                    flash, Blueprint, jsonify
                    )
 
-from app.models import User, ShippingInfo, Kart, Products, Order, association_table
+from app.models import Users, ShippingInfo, Kart, Products, Orders, association_table
 
 import gc
 
@@ -128,7 +128,7 @@ def success():
         user = current_user.email
         send_success_mail(user)
         ref = randint(1, 10000)
-        order = Order(user_id=u, order_ref=ref)
+        order = Orders(user_id=u, order_ref=ref)
         db.session.add(order)
         db.session.commit()
         items = Kart.query.filter_by(user_id=u).all()
@@ -157,7 +157,7 @@ def profile():
     else:
         user = current_user.id
         count = Kart.query.filter_by(user_id=user).count()
-        order = Order.query.filter_by(user_id=user)
+        order = Orders.query.filter_by(user_id=user)
         items = Kart.query.filter_by(user_id=user).all()
 
     form = ShippingForm()
@@ -192,7 +192,7 @@ def reset_request():
         return redirect(url_for('home.homepage'))
     form = RequestResetForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = Users.query.filter_by(email=form.email.data).first()
         send_reset_email(user)
         flash('An email has been sent with instructions to reset you password', 'info')
         return redirect(url_for('auth.login'))
@@ -204,7 +204,7 @@ def reset_request():
 def reset_token(token):
     if current_user.is_authenticated:
         return redirect(url_for('home.homepage'))
-    user = User.verify_reset_token(token)
+    user = Users.verify_reset_token(token)
     if user is None:
         flash('That is an invalid or expired token', 'warning')
         return redirect(url_for('users.reset_request'))

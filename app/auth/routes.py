@@ -3,7 +3,7 @@ from flask import (render_template, request, redirect, url_for, session,
 	flash, Blueprint
 	)
 
-from app.models import db,User
+from app.models import db,Users
 import gc
 from app.auth.forms import RegistrationForm, LoginForm
 from flask_login import (current_user, login_user, logout_user, login_required
@@ -27,7 +27,7 @@ def register():
 		return redirect(url_for('home.homepage'))
 	try:
 		if form.validate_on_submit():
-			user = User(firstname = form.firstname.data, lastname = form.lastname.data,
+			user = Users(firstname = form.firstname.data, lastname = form.lastname.data,
 				email = form.email.data,phonenumber=form.phonenumber.data)
 			user.set_password(form.password.data)
 			db.session.add(user)
@@ -50,7 +50,7 @@ def login():
 			return redirect(url_for('home.homepage'))
 		if form.validate_on_submit():
 			
-			user = User.query.filter_by(email=form.email.data).first()
+			user = Users.query.filter_by(email=form.email.data).first()
 			if user is None or not user.check_password(form.password.data):
 				flash('Invalid username or password','warning')
 				return redirect(url_for('auth.login', form = form, title = "Login to your account"))

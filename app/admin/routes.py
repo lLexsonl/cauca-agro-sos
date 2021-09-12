@@ -3,8 +3,8 @@ from flask import (flash, render_template, Blueprint, url_for, abort, redirect,
                    request
                    )
 from flask_login import current_user, login_required
-from app.admin.forms import CategoriesForm, ProductsForm
-from app.models import Categories, Products, Order
+from app.admin.forms import OrganizacionForm, ProductsForm
+from app.models import Organizaciones, Products, Orders
 from app import photos
 from config import Config
 import gc
@@ -18,33 +18,33 @@ def check_admin():
         abort(403)
 
 
-@admin.route('/categories', methods=['GET', 'POST'])
+@admin.route('/organizaciones', methods=['GET', 'POST'])
 @login_required
-def list_categories():
+def list_organizaciones():
     '''
-    Get all product categories
+    Get all product organizacion
     first check if user is an admin
     '''
 
     check_admin()
 
-    categories = Categories.query.all()
+    organizaciones = Organizaciones.query.all()
 
-    return render_template('admin/categories/categories.html', title="Product Categories",
-                           categories=categories)
+    return render_template('admin/organizaciones/organizacion.html', title="Product Organizacion",
+                           organizaciones=organizaciones)
 
 
-@admin.route('/categories/add/', methods=['GET', 'POST'])
-def add_category():
+@admin.route('/organizacion/add/', methods=['GET', 'POST'])
+def add_organizacion():
     """
-    add a category to the
+    add a organizacion to the
     database
     """
     check_admin()
 
-    add_category = True
+    add_organizacion = True
 
-    form = CategoriesForm()
+    form = OrganizacionForm()
 
     if form.validate_on_submit():
         filename = request.files['image']
@@ -53,33 +53,34 @@ def add_category():
         picture_fn = name + f_ext
         photos.save(filename, name=picture_fn)
         url = photos.url(picture_fn)
-        category = Categories(category_name=form.name.data, category_image=url)
+        organizacion = Organizaciones(
+            organizacion_name=form.name.data, organizacion_image=url)
         try:
-            db.session.add(category)
+            db.session.add(organizacion)
             db.session.commit()
-            flash("You have successfully added a new category")
+            flash("You have successfully added a new Organizacion")
             gc.collect()
         except Exception as e:
-            flash('Error: category name already exits. ')
+            flash('Error: Organizacion name already exits. ')
 
-        return redirect(url_for('admin.list_categories'))
-    return render_template('admin/categories/category.html', action="Add", form=form,
-                           add_category=add_category, title="Add Categories")
+        return redirect(url_for('admin.list_organizaciones'))
+    return render_template('admin/organizacion/organizacion.html', action="Add", form=form,
+                           add_organizacion=add_organizacion, title="Add Organizacion")
 
 
-@admin.route('/categories/edit/<int:id>', methods=["GET", "POST"])
-def edit_category(id):
+@admin.route('/organizacion/edit/<int:id>', methods=["GET", "POST"])
+def edit_organizacion(id):
     '''
-            Edit a category name
+            Edit a organizacion name
     '''
 
     check_admin()
 
-    add_category = False
+    add_organizacion = False
 
-    category = Categories.query.get_or_404(id)
+    organizacion = Organizaciones.query.get_or_404(id)
 
-    form = CategoriesForm(obj=category)
+    form = OrganizacionForm(obj=organizacion)
     if form.validate_on_submit():
         filename = request.files['image']
         _, f_ext = os.path.splitext(filename.filename)
@@ -90,47 +91,47 @@ def edit_category(id):
         photos.save(filename, name=picture_fn)
         url = photos.url(picture_fn)
 
-        category.category_name = form.name.data
-        category.category_image = url
+        organizacion.organizacion_name = form.name.data
+        organizacion.organizacion_image = url
         db.session.commit()
         gc.collect()
-        flash("You have successfully edited the category")
+        flash("You have successfully edited the organizacion")
 
         # remove the changed picture from the folder
         img_dir = Config.UPLOADED_PHOTOS_DEST+'/'
         os.remove(img_dir+previous_img_name)
 
-        # redirect to the categories page
-        return redirect(url_for('admin.list_categories'))
+        # redirect to the organizacion page
+        return redirect(url_for('admin.list_organizaciones'))
     #form.description.data = category.description
-    form.name.data = category.category_name
+    form.name.data = organizacion.organizacion_name
 
-    return render_template('admin/categories/category.html', action="Edit",
-                           add_category=add_category, form=form,
-                           category=category, title="Edit Category")
+    return render_template('admin/organizacion/organizacion.html', action="Edit",
+                           add_organizacion=add_organizacion, form=form,
+                           organizacion=organizacion, title="Edit Organizacion")
 
 
-@admin.route('/categories/delete/<int:id>', methods=["GET", "POST"])
-def delete_category(id):
-    category = Categories.query.get_or_404(id)
+@admin.route('/organizaciones/delete/<int:id>', methods=["GET", "POST"])
+def delete_organizaciones(id):
+    organizacion = Organizaciones.query.get_or_404(id)
 
     # get image extension
-    _, f_ext = os.path.splitext(category.category_image)
+    _, f_ext = os.path.splitext(organizacion.organizacion_image)
 
-    previous_img_name = category.category_name + f_ext
+    previous_img_name = organizacion.organizacion_name + f_ext
     img_dir = Config.UPLOADED_PHOTOS_DEST+'/'
     os.remove(img_dir+previous_img_name)
-    db.session.delete(category)
+    db.session.delete(organizacion)
     db.session.commit()
     gc.collect()
-    flash("You have successfully deleted a Category")
+    flash("You have successfully deleted a Organizacion")
 
-    return redirect(url_for('admin.list_categories'))
+    return redirect(url_for('admin.list_organizaciones'))
 
 
 '''
-	return render_template('admin/categories/category.html',
-	title = "Delete Category")
+	return render_template('admin/organizacion/organizacion.html',
+	title = "Delete Organizacion")
 '''
 
 
@@ -167,7 +168,7 @@ def add_product():
                            product_price=form.price.data, product_image=url,
                            product_description=form.description.data, product_stock=form.stock.data,
                            promotion=form.promotion.data, promotion_value=form.promotion_value.data)
-        product.products_categories = form.categories.data
+        product.products_organizacion = form.organizaciones.data
 
         try:
             # add a product to the database
@@ -271,6 +272,6 @@ def list_orders():
     '''
 	list all orders
 	'''
-    orders = Order.query.all()
+    orders = Orders.query.all()
 
     return render_template('admin/orders.html', title='Orders', orders=orders)

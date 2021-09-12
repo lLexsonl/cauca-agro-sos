@@ -6,16 +6,16 @@ from itsdangerous import TimedJSONWebSignatureSerializer as serializer
 
 
 association_table = db.Table('association',
-                             db.Column('product', db.Integer,
-                                       db.ForeignKey('product.id')),
-                             db.Column('order', db.Integer,
-                                       db.ForeignKey('order.id'))
+                             db.Column('products', db.Integer,
+                                       db.ForeignKey('products.id')),
+                             db.Column('orders', db.Integer,
+                                       db.ForeignKey('orders.id'))
                              )
 
 
-class User(UserMixin, db.Model):
+class Users(UserMixin, db.Model):
 
-    __tablename__ = "user"
+    __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
     firstname = db.Column(db.String(24), index=True)
@@ -25,7 +25,7 @@ class User(UserMixin, db.Model):
     phonenumber = db.Column(db.String(18), index=True, unique=True)
     is_admin = db.Column(db.Boolean, default=False)
     # user and order relationship is a one to many
-    order = db.relationship("Order", backref='ordered_products')
+    order = db.relationship("Orders", backref='ordered_products')
 
     # user and kart is one to one relationship
     kart = db.relationship('Kart', uselist=False, backref='user_kart')
@@ -51,19 +51,19 @@ class User(UserMixin, db.Model):
             user_id = s.loads(token)['user_id']
         except:
             return None
-        return User.query.get(user_id)
+        return Users.query.get(user_id)
 
     def __repr__(self):
-        return '<User {}>'.format(self.email)
+        return '<Users {}>'.format(self.email)
 
 
 @login_manager.user_loader
 def load_user(id):
-    return User.query.get(int(id))
+    return Users.query.get(int(id))
 
 
 class ShippingInfo(db.Model):
-    __tablename__ = "shipping info"
+    __tablename__ = "shippinginfo"
     id = db.Column(db.Integer, primary_key=True)
     address1 = db.Column(db.String(200), index=True)
     address2 = db.Column(db.String(200), index=True)
@@ -71,38 +71,53 @@ class ShippingInfo(db.Model):
     city = db.Column(db.String(24), index=True)
     state = db.Column(db.String(24), index=True)
     country = db.Column(db.String(24), index=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
     def __repr__(self):
         return '<ShippingInfo {}>'.format(self.address1)
 
 
-class Categories(db.Model):
+class Organizaciones(db.Model):
+    __tablename__ = 'organizaciones'
     id = db.Column(db.Integer, primary_key=True)
-    category_name = db.Column(db.String(20), index=True)
-    category_image = db.Column(db.String(120), index=True)
-    # one to many relationship btwn categories and products
-    product = db.relationship('Products', backref='products_categories')
+    organizacion_name = db.Column(db.String(20), index=True)
+    organizacion_image = db.Column(db.String(120))
+    organizacion_location = db.Column(db.String(120))
+    organizacion_phone = db.Column(db.String(15))
+    # one to many relationship btwn organizaciones and products
+    product = db.relationship('Products', backref='products_organizaciones')
 
     def __repr__(self):
-        return '<Categories {}>'.format(self.category_name)
+        return '<Organizaciones{}>'.format(self.organizacion_name)
+
+
+class Inversionistas(db.Model):
+    __tablename__ = 'inversionistas'
+    id = db.Column(db.Integer, primary_key=True)
+    inversionista_nombre = db.Column(db.String(20), index=True)
+    inversionista_image = db.Column(db.String(120))
+    inversionista_desc = db.Column(db.String(120))
+    inversionista_email = db.Column(db.String(120))
+
+    def __repr__(self):
+        return '<Inversionistas{}>'.format(self.organizacion_name)
 
 
 class Products(db.Model):
-    __tablename__ = 'product'
+    __tablename__ = 'products'
     id = db.Column(db.Integer, primary_key=True)
     product_name = db.Column(db.String(100), index=True)
     product_price = db.Column(db.Integer, index=True)
-    product_image = db.Column(db.String(120), index=True)
+    product_image = db.Column(db.String(120))
     product_description = db.Column(db.String(200), index=True)
     product_stock = db.Column(db.Integer, index=True)
     product_size = db.Column(db.String(5), index=True)
-    promotion = db.Column(db.Boolean, index=True, nullable=False)
-    promotion_value = db.Column(db.Integer, index=True, nullable=False)
-    categories_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
+    promotion = db.Column(db.Boolean, index=True)
+    promotion_value = db.Column(db.Integer, index=True)
+    organizacion_id = db.Column(db.Integer, db.ForeignKey('organizaciones.id'))
 
     order = db.relationship(
-        'Order', secondary=association_table, backref='my_orders', lazy='dynamic')
+        'Orders', secondary=association_table, backref='my_orders', lazy='dynamic')
 
     def __repr__(self):
         return '<Products {}>'.format(self.product_name)
@@ -110,25 +125,25 @@ class Products(db.Model):
 
 class Kart(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    product_id = db.Column(db.Integer, db.ForeignKey('product.id'))
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
     product = db.relationship('Products', uselist=False)
     quantity = db.Column(db.Integer)
     subtotal = db.Column(db.Integer)
     # user and kart is one to one relationship
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship('User', uselist=False, backref='user')
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship('Users', uselist=False, backref='users')
 
     def __repr__(self):
         return '<Cart {}>'.format(self.product.product_name)
 
 
-class Order(db.Model):
-    __tablename__ = 'order'
+class Orders(db.Model):
+    __tablename__ = 'orders'
     id = db.Column(db.Integer, primary_key=True)
     order_ref = db.Column(db.Integer, index=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    user = db.relationship('User', uselist=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user = db.relationship('Users', uselist=False)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
 
     def __repr__(self):
-        return '<Order {}>'.format(self.timestamp)
+        return '<Orders {}>'.format(self.timestamp)
