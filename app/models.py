@@ -88,7 +88,7 @@ class Organizaciones(db.Model):
     product = db.relationship('Products', backref='products_organizaciones')
 
     def __repr__(self):
-        return '<Organizaciones{}>'.format(self.organizacion_name)
+        return f'<Organizacion {self.organizacion_name} {self.organizacion_location} {self.organizacion_image} {self.organizacion_phone}>'
 
 
 class Inversionistas(db.Model):

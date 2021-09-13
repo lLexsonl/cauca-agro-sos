@@ -5,7 +5,7 @@ from flask import (render_template, request, redirect, url_for, session,
 
 from flask_login import current_user, login_required
 
-from app.models import Users, Organizaciones, Products, Kart
+from app.models import Organizaciones, Products, Kart
 from app.admin.forms import Variations
 import random
 home = Blueprint('home', __name__)
@@ -49,27 +49,40 @@ def homepage():
                            categories=categories, products=products, count=count, sorter=sorter)
 
 
-@home.route('/<string:category_name>')
-def shop_by_category(category_name):
+@home.route('/canasta')
+def canasta():
     if current_user.is_anonymous:
-
         count = 0
     else:
         count = Kart.query.filter_by(user_id=current_user.id).count()
 
     page = request.args.get('page', 1, type=int)
 
-    category = Organizaciones.query.filter_by(
-        category_name=category_name).first_or_404()
-
-    product = Products.query.filter_by(categories_id=category.id)\
+    products = Products.query\
         .order_by(Products.product_name).paginate(page=page, per_page=6)
 
-    for_pagi = Organizaciones.query.filter_by(
-        category_name=Organizaciones.category_name).first_or_404()
-    return render_template("home/shop_by_category.html", category=category,
-                           product=product, title="Oranizacion: " + category.category_name, count=count,
-                           for_pagi=for_pagi)
+    return render_template("home/canasta.html", title="Canasta Agricola", products=products, count=count)
+
+
+@home.route('/organizaciones')
+def organizaciones():
+
+    page = request.args.get('page', 1, type=int)
+
+    organizaciones = Organizaciones.query\
+        .order_by(Organizaciones.organizacion_name).paginate(page=page, per_page=6)
+
+    return render_template("home/organizaciones.html", title="Organizaciones", organizaciones=organizaciones)
+
+
+@home.route('/organizaciones/<string:organizacion_name>', methods=["GET", "POST"])
+def organizacion_details(organizacion_name):
+
+    organizacion = Organizaciones.query.filter_by(
+        organizacion_name=organizacion_name).first_or_404()
+
+    return render_template("home/organizacion_details.html",
+                           organizacion=organizacion, title=organizacion.organizacion_name)
 
 
 @home.route('/product/<string:product_name>', methods=["GET", "POST"])

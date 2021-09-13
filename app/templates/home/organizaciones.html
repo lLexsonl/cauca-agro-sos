@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock title %}
+
+{% block body %}
+{% if title=='organizaciones'%}
+<style>
+    .title
+    {
+        margin: 0;
+        padding: 0;
+        margin-left: 20px;
+        margin-top: 6px;
+
+    }
+    .product-name
+    {
+        
+        font-family: Roboto,Helvetica,Arial,sans-serif;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 17px;
+        color: #000;
+        margin: 3px 0 5px 0;
+        text-align: left;
+        white-space: normal;
+        overflow: hidden;
+    }
+    .price{
+        
+        margin-left: 20px;
+        font-family: Roboto,Helvetica,Arial,sans-serif;
+        font-weight: 400;
+        font-size: 13px;
+        line-height: 17px;
+        color: #202020;
+        display: inline-block;
+    }
+</style>
+{% endif %}
+
+<div class="row d-block">
+  {% for organizacion_list in organizaciones.items %}
+    <a href="{{ url_for('home.organizacion_details', organizacion_name=organizacion_list.organizacion_name) }}">
+          <div class="col l4 s12 m6">
+        <div class="card-panel hoverable" style="max-height:360px; background-color:#FFFFFF;">    
+          <div class="card-image" style="margin-left:auto;margin-right: auto;">
+            <div class="thumbnail" style="height:220px;margin-bottom: 0px;">
+                <img class="responsive-img" src="{{ organizacion_list.organizacion_image }}" style="height:100%;">
+            </div>
+            <h6 class="title">
+                <span class="product-name">
+                    {{ organizacion_list.organizacion_name }}            
+                </span>
+            </h6>
+          </div>
+        </div>
+      </div>
+    </a>
+  {% endfor %}
+</div>
+{% for page_num in organizaciones.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+{% if page_num %}
+    {% if page_num.page == page_num %}
+        <a class="btn btn-info mb-4" href="{{ url_for('home.organizaciones', title=title, page=page_num)}}">{{page_num}}</a>
+    {% else %}
+    <a class="btn btn-outline-info mb-4" href="{{ url_for('home.organizaciones', title=title, page=page_num)}}">{{page_num}}</a>
+    {%endif%}
+{%endif%}
+{% endfor %}
+</div>
+{% endblock %}

@@ -1,12 +1,9 @@
-
-<!-- template name is named category because it serves two purposes 
-    to add and edit a category-->
 {% extends "base.html" %}
 {% block title %}
-    {% if add_category %}
-        Add Category
+    {% if add_organizacion%}
+        Add Organizacion
     {% else %}
-        Edit Category
+        Edit Organizacion
     {% endif %}
 {% endblock %}
 {% block body %}
@@ -15,25 +12,34 @@
     <div class="middle">
       <div class="inner">
         <div class="center">
-            {% if add_category %}
-                <h1>Add Category</h1>
+            {% if add_organizacion %}
+                <h1>Add Organizacion</h1>
             {% else %}
-                <h1>Edit Category</h1>
+                <h1>Edit Organizacion</h1>
             {% endif %}
             <br/>
             <form method="POST" enctype="multipart/form-data">
                     {{ form.hidden_tag() }}
                     <div class="form-group">
                             {{ form.name.label(class="form-control-label") }}
-
                             {{ form.name(class="form-control form-control") }}
-
                     </div>
+
                     <div class="form-group">
                         {{ form.image.label(class="form-control-label") }}
                         {{ form.image(class="form-control-file") }}
                     </div>
-                
+ 
+                    <div class="form-group">
+                        {{ form.location.label(class="form-control-label") }}
+                        {{ form.location(class="form-control-file") }}
+                    </div>
+  
+                    <div class="form-group">
+                        {{ form.phone.label(class="form-control-label") }}
+                        {{ form.phone(class="form-control-file") }}
+                    </div>
+              
                 <div class="form-group"> 
                     {{ form.submit(class="btn btn-outline-success") }}
                 </div>

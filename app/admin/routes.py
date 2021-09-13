@@ -30,11 +30,10 @@ def list_organizaciones():
 
     organizaciones = Organizaciones.query.all()
 
-    return render_template('admin/organizaciones/organizacion.html', title="Product Organizacion",
-                           organizaciones=organizaciones)
+    return render_template('admin/organizaciones/organizaciones.html', title="Organizaciones", organizaciones=organizaciones)
 
 
-@admin.route('/organizacion/add/', methods=['GET', 'POST'])
+@admin.route('/organizacion/add', methods=['GET', 'POST'])
 def add_organizacion():
     """
     add a organizacion to the
@@ -47,6 +46,12 @@ def add_organizacion():
     form = OrganizacionForm()
 
     if form.validate_on_submit():
+        name = Organizaciones.query.filter(Organizaciones.organizacion_name==form.name.data).first()
+        if name:
+            flash("Organizacion already exists.")
+            return render_template('admin/organizaciones/organizacion.html', action="Add", form=form,
+                           add_organizacion=add_organizacion, title="Add Organizacion")
+
         filename = request.files['image']
         _, f_ext = os.path.splitext(filename.filename)
         name = form.name.data
@@ -54,17 +59,17 @@ def add_organizacion():
         photos.save(filename, name=picture_fn)
         url = photos.url(picture_fn)
         organizacion = Organizaciones(
-            organizacion_name=form.name.data, organizacion_image=url)
+            organizacion_name=form.name.data, organizacion_image=url, organizacion_location=form.location.data, organizacion_phone=form.phone.data)
         try:
             db.session.add(organizacion)
             db.session.commit()
             flash("You have successfully added a new Organizacion")
             gc.collect()
-        except Exception as e:
+        except Exception:
             flash('Error: Organizacion name already exits. ')
 
         return redirect(url_for('admin.list_organizaciones'))
-    return render_template('admin/organizacion/organizacion.html', action="Add", form=form,
+    return render_template('admin/organizaciones/organizacion.html', action="Add", form=form,
                            add_organizacion=add_organizacion, title="Add Organizacion")
 
 
@@ -112,7 +117,7 @@ def edit_organizacion(id):
 
 
 @admin.route('/organizaciones/delete/<int:id>', methods=["GET", "POST"])
-def delete_organizaciones(id):
+def delete_organizacion(id):
     organizacion = Organizaciones.query.get_or_404(id)
 
     # get image extension
@@ -147,7 +152,7 @@ def list_products():
     return render_template('admin/products/products.html', title='Products', products=products)
 
 
-@admin.route('/products/add/', methods=["GET", "POST"])
+@admin.route('/products/add', methods=["GET", "POST"])
 @login_required
 def add_product():
     '''
@@ -164,11 +169,11 @@ def add_product():
         picture_fn = name + f_ext
         photos.save(filename, name=picture_fn)
         url = photos.url(picture_fn)
-        product = Products(product_name=form.name.data,
-                           product_price=form.price.data, product_image=url,
+
+        product = Products(product_name=form.name.data, product_price=form.price.data, product_image=url,
                            product_description=form.description.data, product_stock=form.stock.data,
-                           promotion=form.promotion.data, promotion_value=form.promotion_value.data)
-        product.products_organizacion = form.organizaciones.data
+                           promotion=form.promotion.data, promotion_value=form.promotion_value.data,
+                            organizacion_id=form.organizaciones.data.id,)
 
         try:
             # add a product to the database
@@ -183,7 +188,6 @@ def add_product():
         # redirect to the roles page
         return redirect(url_for('admin.list_products'))
     # load product template
-    print("Render")
     return render_template('admin/products/product.html', add_product=add_product,
                            form=form, title="Add Product")
 
