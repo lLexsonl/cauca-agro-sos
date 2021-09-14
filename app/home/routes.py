@@ -5,7 +5,7 @@ from flask import (render_template, request, redirect, url_for, session,
 
 from flask_login import current_user, login_required
 
-from app.models import Organizaciones, Products, Kart
+from app.models import Inversionistas, Organizaciones, Products, Kart
 from app.admin.forms import Variations
 import random
 home = Blueprint('home', __name__)
@@ -115,3 +115,26 @@ def product_details(product_name):
     return render_template("home/productdetails.html",
                            product_detail=product_detail, title=product_detail.product_name,
                            form=form, count=count)
+
+
+@home.route('/inversionistas')
+def inversionistas():
+
+    page = request.args.get('page', 1, type=int)
+
+    inversionistas = Inversionistas.query\
+        .order_by(Inversionistas.inversionista_nombre).paginate(page=page, per_page=6)
+
+    return render_template("home/inversionistas.html", title="Inversionistas", inversionistas=inversionistas)
+
+
+@home.route('/inversionistas/<int:inversionista_id>', methods=["GET", "POST"])
+def inversionista_details(inversionista_id):
+
+    inversionista = Inversionistas.query.filter_by(
+        inversionista_id=inversionista_id).first_or_404()
+
+    return render_template("home/inversionista_details.html",
+                           inversionista=inversionista, title=inversionista.inversionista_name)
+
+

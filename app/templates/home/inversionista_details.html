@@ -3,28 +3,29 @@
 {% block body %}
 <div class="container-fluid clearfix" style="max-width:90%; margin-left: auto; margin-right: auto;">
     <div class="float-left" style=" width:50%;">
-      <img  class="responsive-img" src="{{ organizacion.organizacion_image}}">
+      <img  class="responsive-img" src="{{ inversionista.inversionista_image }}">
     </div>
     <div class="float-right" style="width:48%;">
       <div>
         <span style="font-size:1.5rem;">
-          <b>{{ organizacion.organizacion_name }}</b>
+          <b>{{ inversionista.inversionista_nombre }}</b>
         </span>
         <article>
-          <h5 style="font-size:1.2rem;"><b>Location</b></h5>
+          <h5 style="font-size:1.2rem;"><b>Description</b></h5>
           <p style="font-size:;1rem">
             <div class="product-description">
-              {{ organizacion.organizacion_location }}
+              {{ inversionista.inversionista_desc }}
           </p>
-          <h5 style="font-size:1.2rem;"><b>Phone</b></h5>
+          <h5 style="font-size:1.2rem;"><b>Email</b></h5>
           <p style="font-size:1rem;">
             </div>
             <div class="product-description">
-              {{ organizacion.organizacion_phone}}
+              {{ inversionista.inversionista_email }}
             </div>
           </p>
         </article>
       </div>
     </div>
 </div>
+
 {% endblock %}

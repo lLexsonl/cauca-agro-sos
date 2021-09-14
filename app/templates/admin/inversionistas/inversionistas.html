@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+
+{% block head %}
+
+<head>
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+</head>
+
+{%endblock head%}
+
+{% block body %}
+
+<div class="container">
+  <div class="outer">
+    <div class="middle">
+      <div class="inner">
+        <br/>
+        <br/>
+        <h1 style="text-align:center;">Inversionistas</h1>
+        {% if inversionistas %}
+          <hr class="intro-divider">
+          
+            <table class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th width="45%"> Id </th>
+                  <th width="45%"> Name </th>
+                  <!-- <th width="40%"> Description </th> -->
+                  <th width="15%"> Email</th>
+                  <th width="15%"> Edit </th>
+                  <th width="15%"> Delete </th>
+                </tr>
+              </thead>
+              <tbody>
+              {% for inversionista in inversionistas %}
+                <tr>
+                  <td> {{ inversionista.id}} </td>
+                  <td> {{ inversionista.inversionista_nombre }} </td>
+                  <!-- add a organizacion description if needed -->
+                  <td> {{ inversionista.inversionista_email }} </td>
+                  
+                  <td>
+                    <a href="{{ url_for('admin.edit_inversionista', id=inversionista.id) }}">
+                      <i class="fa fa-pencil"></i> Edit 
+                    </a>
+                  </td>
+                  <td>
+                    <a href="{{ url_for('admin.delete_inversionista', id=inversionista.id) }}">
+                      <i class="fa fa-trash"></i> Delete 
+                    </a>
+                  </td>
+                </tr>
+              {% endfor %}
+              </tbody>
+            </table>
+          <div style="text-align: center">
+        {% else %}
+          <div style="text-align: center">
+            <h3> No Inversionista have been added. </h3>
+            <hr class="intro-divider">
+        {% endif %}
+          <a href="{{ url_for('admin.add_inversionista') }}" class="btn btn-outline-success">
+            <i class="fa fa-plus"></i>
+            Add Inversionista
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

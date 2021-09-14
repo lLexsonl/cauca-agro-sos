@@ -3,8 +3,8 @@ from flask import (flash, render_template, Blueprint, url_for, abort, redirect,
                    request
                    )
 from flask_login import current_user, login_required
-from app.admin.forms import OrganizacionForm, ProductsForm
-from app.models import Organizaciones, Products, Orders
+from app.admin.forms import OrganizacionForm, ProductsForm, InversionistaForm
+from app.models import Inversionistas, Organizaciones, Products, Orders
 from app import photos
 from config import Config
 import gc
@@ -279,3 +279,59 @@ def list_orders():
     orders = Orders.query.all()
 
     return render_template('admin/orders.html', title='Orders', orders=orders)
+
+@admin.route('/inversionistas', methods=['GET', 'POST'])
+@login_required
+def list_inversionistas():
+    '''
+    Get all product organizacion
+    first check if user is an admin
+    '''
+
+    check_admin()
+
+    inversionistas = Inversionistas.query.all()
+
+    return render_template('admin/inversionistas/inversionistas.html', title="Inversionistas", inversionistas=inversionistas)
+
+
+@admin.route('/inversionista/add', methods=['GET', 'POST'])
+def add_inversionista():
+    """
+    add a organizacion to the
+    database
+    """
+    check_admin()
+
+    add_inversionista = True
+
+    form = InversionistaForm()
+
+    if form.validate_on_submit():
+        name = Inversionistas.query.filter(Inversionistas.inversionista_nombre==form.name.data).first()
+        if name:
+            flash("Inversionista already exists.")
+            return render_template('admin/inversionistas/inversionista.html', action="Add", form=form,
+                           add_inversionista=add_inversionista, title="Add Inversionista")
+
+        filename = request.files['image']
+        _, f_ext = os.path.splitext(filename.filename)
+        name = form.name.data
+        picture_fn = name + f_ext
+        photos.save(filename, name=picture_fn)
+        url = photos.url(picture_fn)
+        inversionista = Inversionistas(
+            inversionista_nombre=form.name.data, inversionista_image=url, inversionista_desc=form.desc.data, inversionista_email=form.email.data)
+        try:
+            db.session.add(inversionista)
+            db.session.commit()
+            flash("You have successfully added a new Inversionista")
+            gc.collect()
+        except Exception:
+            flash('Error: Inversionista name already exits. ')
+
+        return redirect(url_for('admin.list_inversionistas'))
+    return render_template('admin/inversionistas/inversionista.html', action="Add", form=form,
+                           add_inversionista=add_inversionista, title="Add Inversionista")
+
+

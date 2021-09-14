@@ -19,6 +19,17 @@ class OrganizacionForm(FlaskForm):
     submit = SubmitField('Submit')
 
 
+class InversionistaForm(FlaskForm):
+
+    name = StringField('Name', [validators.DataRequired()])
+    image = FileField('Organizacion image', validators=[FileRequired(),
+                                                        FileAllowed(photos, "images only")])
+    desc = StringField('Description', [validators.DataRequired()])
+    email = StringField('Email', [validators.DataRequired()])
+    submit = SubmitField('Submit')
+
+
+
 class ProductsForm(FlaskForm):
     '''
     Form for admin to add or edit a product
