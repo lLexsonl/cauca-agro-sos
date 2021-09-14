@@ -28,30 +28,18 @@
           </p>
         </article>
         <section>
-          <section>
             <form class="form-inline" method="POST">
               {{ form.hidden_tag() }}
-              {% for subfield in form.sizes %}
-              <div class="radio">
-                <style>
-                label
-                {
-                  margin-right: 5px;
-                  font-size: 14px;
-                  color:inherit;
-                }
-                </style>
-                {{ subfield }} 
-                {{ subfield.label }}  
-              </div>
-              {% endfor %}
-              <div>
-                {{ form.submit(class="btn btn-primary d-block")}}   
-                <!-- change button and render form from forms.py -->
-              </div>
+              <h5 style="font-size: 19px;">Cantidad</h5>
+                <div class="m-1">
+                  {{ form.amount }}
+                </div>
             </form>
-          </section>
         </section>
+        <div>
+          {{ form.submit(class="btn btn-primary")}}   
+          <!-- change button and render form from forms.py -->
+        </div>
       </div>
     </div>
 </div>

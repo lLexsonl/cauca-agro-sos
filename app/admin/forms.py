@@ -39,6 +39,5 @@ class ProductsForm(FlaskForm):
 
 
 class Variations(FlaskForm):
-    sizes = RadioField('Sizes', validators=[DataRequired(message="select a product size")],
-                       choices=[('Small', 'S'), ('Medium', 'M'), ('Large', 'L'), ('Extra Large', 'XL')])
+    amount = IntegerField('Amount', validators=[DataRequired(message="Quantity of the product")])
     submit = SubmitField('Add to Cart')
