@@ -17,7 +17,7 @@
 					<strong>Product</strong>
 				</div>
 				<div class="col-3 col-md-2">
-						<strong>Size</strong>
+						<strong>Amount</strong>
 				</div>
 				<div class="col-auto left">
 						<strong>Subtotal</strong>
@@ -55,7 +55,7 @@
 			<div class="col-auto left">
 					<p> 
 							<span class="iso">₦</span>
-							<span class="item-total{{items.id}} item-total">{{items.subtotal}}
+							<span class="item-total{{ items.id }} item-total">{{ items.subtotal }}
 						</span></p>
 			</div>
 			<div class="col-auto col-md-4">
@@ -70,7 +70,7 @@
 
 							<input id="plus-btn" type="button" class="plus-btn{{items.id}} 	btn btn-sm btn-outline-info" value="+">
 
-							 <span class="times">x</span> <span class="iso">₦</span> <span class="item-price{{items.id}}"> {{ items.product.product_price }}</span>
+							 <span class="times">x</span> <span class="iso">$</span> <span class="item-price{{items.id}}"> {{ items.product.product_price }}</span>
 						</p>
 						
 					</form>

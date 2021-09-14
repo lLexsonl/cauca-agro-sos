@@ -38,12 +38,10 @@ class RequestResetForm(FlaskForm):
 
 class ResetPasswordForm(FlaskForm):
 
-    password = PasswordField('Password', [validators.Length(min=8, max=25,
-                                                            message="Password must be 8 to 25 characters long"), validators.Required()]
+    password = PasswordField('Password', [validators.Length(min=8, max=25, message="Password must be 8 to 25 characters long"), validators.Required()]
                              )
 
-    confirm = PasswordField('Repeat Password', [validators.EqualTo('password',
-                                                                   message="Passwords must match. ")]
+    confirm = PasswordField('Repeat Password', [validators.EqualTo('password', message="Passwords must match.")]
                             )
 
     submit = SubmitField('Reset Password')

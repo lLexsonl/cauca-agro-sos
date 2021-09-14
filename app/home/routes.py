@@ -92,6 +92,7 @@ def product_details(product_name):
     else:
         count = Kart.query.filter_by(user_id=current_user.id).count()
         user = current_user.id
+
     form = Variations()
 
     product_detail = Products.query.filter_by(
@@ -102,19 +103,15 @@ def product_details(product_name):
         # annonymous users
         if current_user.is_anonymous:
             flash(
-                'please login before you can add items to your shopping cart', 'warning')
-            return redirect(url_for("home.product_details",
-                                    product_name=product_detail.product_name))
+                'Please login before you can add items to your shopping cart', 'warning')
+            return redirect(url_for("home.product_details", product_name=product_detail.product_name))
         # authenticated users
-        product_detail.product_size = form.sizes.data
-        cart = Kart(user_id=user, product_id=product_detail.id, quantity=1,
-                    subtotal=product_detail.product_price)
+        cart = Kart(user_id=user, product_id=product_detail.id, quantity=form.amount.data, subtotal=product_detail.product_price)
         db.session.add(cart)
         db.session.commit()
 
-        flash("{} has been added to cart".format(product_detail.product_name))
-        return redirect(url_for('home.product_details',
-                                product_name=product_detail.product_name))
+        flash(f"{product_detail.product_name} has been added to cart")
+        return redirect(url_for('home.product_details', product_name=product_detail.product_name))
     return render_template("home/productdetails.html",
                            product_detail=product_detail, title=product_detail.product_name,
                            form=form, count=count)

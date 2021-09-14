@@ -39,5 +39,6 @@ class ProductsForm(FlaskForm):
 
 
 class Variations(FlaskForm):
-    amount = IntegerField('Amount', validators=[DataRequired(message="Quantity of the product")])
+    amount = IntegerField('Amount', validators=[DataRequired()])
+
     submit = SubmitField('Add to Cart')

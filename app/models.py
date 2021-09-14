@@ -134,7 +134,7 @@ class Kart(db.Model):
     user = db.relationship('Users', uselist=False, backref='users')
 
     def __repr__(self):
-        return '<Cart {}>'.format(self.product.product_name)
+        return '<Cart {}>'.format(self.id)
 
 
 class Orders(db.Model):

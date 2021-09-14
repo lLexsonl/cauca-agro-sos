@@ -109,9 +109,13 @@
 
 .product-description
 {
-  max-width:480px;;
+  max-width: 20rem;
   min-width: auto;
   height: auto;
+}
+
+.product-amount{
+  max-width: 6rem;
 }
 
 .push

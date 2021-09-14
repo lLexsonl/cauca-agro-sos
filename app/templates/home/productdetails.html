@@ -3,45 +3,70 @@
 {% block body %}
 {% if product_detail %}
 
-<div class="container-fluid clearfix" style="max-width:90%; margin-left: auto; margin-right: auto;">
-    <div class="float-left" style=" width:50%;">
-      <img  class="responsive-img" src="{{ product_detail.product_image }}">
-    </div>
+<div class="container mt-1 mb-3"
+  <div class="card" style="width: 25rem;">
+    <img src="{{ product_detail.product_image }}" class="card-img-top" alt="{{ product_detail.name }}">
+    <div class="card-body">
+      <h5 class="card-title">{{ product_detail.product_name }}</h5>
 
-    <div class="float-right" style="width:48%;">
-      <div>
-        <span class="product-name">
-          {{ product_detail.product_name }}
-        </span>
-        <h5 style="font-size:19px">
-          Stock: <span style="color:forestgreen;">{{ product_detail.product_stock }}</span>
-        </h5>
-        <article>
-          <h5 style="font-size: 19px;">
-            Description
-          </h5>
-
-          <p style="font-size:15px;">
-            <div class="product-description">
-              {{ product_detail.product_description }}
-            </div>
-          </p>
-        </article>
-        <section>
-            <form class="form-inline" method="POST">
-              {{ form.hidden_tag() }}
-              <h5 style="font-size: 19px;">Cantidad</h5>
-                <div class="m-1">
-                  {{ form.amount }}
-                </div>
-            </form>
-        </section>
-        <div>
-          {{ form.submit(class="btn btn-primary")}}   
-          <!-- change button and render form from forms.py -->
-        </div>
+      <div class="row justify-content-center align-items-center">
+          <div class="col-sm">
+            <h6 class="card-subtitle mt-0">Stock</h6>
+          </div>
+          <div class="col-sm">
+            <p class="card-text mt-0">{{ product_detail.product_stock }}</p>
+          </div>
       </div>
-    </div>
+
+       <div class="row justify-content-center align-items-center">
+          <div class="col-sm">
+            <h6 class="card-subtitle mt-0">Price</h6>
+          </div>
+          <div class="col-sm">
+            <p class="card-text mt-0">{{ product_detail.product_price }}</p>
+          </div>
+      </div>
+
+       <div class="row justify-content-center align-items-center">
+          <div class="col-sm">
+            <h6 class="card-subtitle mt-0">Promotion</h6>
+          </div>
+          <div class="col-sm">
+            <p class="card-text mt-0">{{ product_detail.promotion_value }} %</p>
+          </div>
+      </div>
+
+       <div class="row justify-content-center align-items-center">
+          <div class="col-sm">
+            <h6 class="card-subtitle mt-0">Description</h6>
+          </div>
+          <div class="col-sm">
+            <p class="card-text mt-0">{{ product_detail.product_description }}</p>
+          </div>
+      </div>
+
+     <form class="form-inline" method="POST">
+      {{ form.hidden_tag() }}
+        <div class="row">
+          <div class="form-group">
+            <div class="col-sm">
+              {{ form.amount.label(class="form-control-label") }}
+            </div>
+            <div class="col-sm">
+              {{ form.amount(class="form-control form-control") }}
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-sm">
+              <div class="form-group"> 
+                {{ form.submit(class="btn btn-outline-success") }}
+              </div>
+          </div>
+        </div>
+      </form>
+  </div>
 </div>
 
 {% endif %}
