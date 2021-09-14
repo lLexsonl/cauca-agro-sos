@@ -335,3 +335,66 @@ def add_inversionista():
                            add_inversionista=add_inversionista, title="Add Inversionista")
 
 
+@admin.route('/inversionista/edit/<int:id>', methods=["GET", "POST"])
+def edit_inversionista(id):
+    '''
+            Edit a organizacion name
+    '''
+
+    check_admin()
+
+    add_inversionista = False
+
+    inversionista = Inversionistas.query.get_or_404(id)
+
+    form = InversionistaForm(obj=inversionista)
+    if form.validate_on_submit():
+        filename = request.files['image']
+        _, f_ext = os.path.splitext(filename.filename)
+        name = form.name.data
+        picture_fn = name + f_ext
+        # get the name of the previous image
+        previous_img_name = picture_fn
+        photos.save(filename, name=picture_fn)
+        url = photos.url(picture_fn)
+
+        inversionista.inversionista_nombre = form.name.data
+        inversionista.inversionista_image = url
+        inversionista.inversionista_desc = form.desc.data
+        inversionista.inversionista_email = form.email.data
+        db.session.commit()
+        gc.collect()
+        flash("You have successfully edited the organizacion")
+
+        # remove the changed picture from the folder
+        img_dir = Config.UPLOADED_PHOTOS_DEST+'/'
+        os.remove(img_dir+previous_img_name)
+
+        # redirect to the organizacion page
+        return redirect(url_for('admin.list_organizaciones'))
+    #form.description.data = category.description
+    form.name.data = inversionista.name
+
+    return render_template('admin/inversionistas/inversionista.html', action="Edit",
+                           add_inversionista=add_inversionista, form=form,
+                           inversionista=inversionista, title="Edit Inversionista")
+
+
+@admin.route('/inversionista/delete/<int:id>', methods=["GET", "POST"])
+def delete_inversionista(id):
+    inversionista = Inversionistas.query.get_or_404(id)
+
+    # get image extension
+    _, f_ext = os.path.splitext(inversionista.inversionista_image)
+
+    previous_img_name = inversionista.inversionista_nombre + f_ext
+    img_dir = Config.UPLOADED_PHOTOS_DEST+'/'
+    os.remove(img_dir+previous_img_name)
+    db.session.delete(inversionista)
+    db.session.commit()
+    gc.collect()
+    flash("You have successfully deleted a Organizacion")
+
+    return redirect(url_for('admin.list_inversionistas'))
+
+

@@ -106,7 +106,8 @@ def product_details(product_name):
                 'Please login before you can add items to your shopping cart', 'warning')
             return redirect(url_for("home.product_details", product_name=product_detail.product_name))
         # authenticated users
-        cart = Kart(user_id=user, product_id=product_detail.id, quantity=form.amount.data, subtotal=product_detail.product_price)
+        cart = Kart(user_id=user, product_id=product_detail.id,
+                    quantity=form.amount.data, subtotal=product_detail.product_price)
         db.session.add(cart)
         db.session.commit()
 
@@ -132,9 +133,7 @@ def inversionistas():
 def inversionista_details(inversionista_id):
 
     inversionista = Inversionistas.query.filter_by(
-        inversionista_id=inversionista_id).first_or_404()
+        id=inversionista_id).first_or_404()
 
     return render_template("home/inversionista_details.html",
-                           inversionista=inversionista, title=inversionista.inversionista_name)
-
-
+                           inversionista=inversionista, title=inversionista.inversionista_nombre)
