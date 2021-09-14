@@ -148,7 +148,7 @@ def failed():
     return render_template('users/failed.html')
 
 
-@users.route('/profile/', methods=["GET", "POST"])
+@users.route('/profile', methods=["GET", "POST"])
 def profile():
     if current_user.is_anonymous:
         count = 0
