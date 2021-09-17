@@ -10,9 +10,15 @@
         var map = new mapboxgl.Map({
           container: 'map',
           style: 'mapbox://styles/mapbox/streets-v11',
-          center: [-76.5994497500150, 2.446358589892211],
-          zoom: 15
+          center: [-76.60631917174642, 2.4419131406694277],
+          zoom: 12.5
         });
+
+        const marker = new mapboxgl.Marker({
+        color: "#5FAFFF",
+        draggable: false
+        }).setLngLat([-76.5994497500150, 2.446358589892211])
+        .addTo(map);
       </script>
 
 </div>
