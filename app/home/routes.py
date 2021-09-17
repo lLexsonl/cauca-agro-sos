@@ -137,3 +137,10 @@ def inversionista_details(inversionista_id):
 
     return render_template("home/inversionista_details.html",
                            inversionista=inversionista, title=inversionista.inversionista_nombre)
+
+
+@home.route('/eventos')
+def eventos():
+    return render_template("home/eventos.html", title="Eventos")
+
+
