@@ -9,6 +9,17 @@
     <div class="card-body">
       <h5 class="card-title">{{ product_detail.product_name }}</h5>
 
+       <div class="row justify-content-center align-items-center">
+          <div class="col-sm">
+            <h6 class="card-subtitle mt-0">Organizacion</h6>
+          </div>
+          <div class="col-sm">
+            <a href="{{ url_for('home.organizacion_details', organizacion_name=organizacion.organizacion_name) }} ">
+              <p class="card-text mt-0">{{ organizacion.organizacion_name }}</p>
+            </a>
+          </div>
+      </div>
+
       <div class="row justify-content-center align-items-center">
           <div class="col-sm">
             <h6 class="card-subtitle mt-0">Stock</h6>

@@ -95,8 +95,8 @@ def product_details(product_name):
 
     form = Variations()
 
-    product_detail = Products.query.filter_by(
-        product_name=product_name).first_or_404()
+    product_detail = Products.query.filter_by(product_name=product_name).first_or_404()
+    organizacion = Organizaciones.query.filter_by(id=product_detail.organizacion_id).first_or_404()
 
     # add to cart
     if form.validate_on_submit():
@@ -115,7 +115,7 @@ def product_details(product_name):
         return redirect(url_for('home.product_details', product_name=product_detail.product_name))
     return render_template("home/productdetails.html",
                            product_detail=product_detail, title=product_detail.product_name,
-                           form=form, count=count)
+                           form=form, count=count, organizacion=organizacion)
 
 
 @home.route('/inversionistas')

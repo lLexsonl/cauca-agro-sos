@@ -4,7 +4,7 @@
 
   `python3 -m venv <venv>`
 
-  *<venv>* is virtual environment name.
+  **<venv>** is virtual environment name.
 
 2. Now activate the virtual environment:
 
