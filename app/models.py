@@ -147,3 +147,14 @@ class Orders(db.Model):
 
     def __repr__(self):
         return '<Orders {}>'.format(self.timestamp)
+
+
+class Eventos(db.Model):
+    __tablename__ = 'eventos'
+    id = db.Column(db.Integer, primary_key=True)
+    evento_name = db.Column(db.String(20), index=True)
+    evento_lat = db.Column(db.Float)
+    evento_long = db.Column(db.Float)
+
+    def __repr__(self):
+        return f'<Evento {self.evento_name}>'

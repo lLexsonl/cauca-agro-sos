@@ -3,23 +3,30 @@
 {% block body %}
 
 <div class="container mt-1 mb-3 justify-content-center align-items-center"
+  <div id='map' style='width: 50rem; height: 25rem;'></div>
+  <script>
 
-      <div id='map' style='width: 50rem; height: 25rem;'></div>
-      <script>
-        mapboxgl.accessToken = 'pk.eyJ1IjoieWVyc29uYXJnb3RlIiwiYSI6ImNrcXRwMW85dTAyMHgycHBmYXhyaDNhcGgifQ.3HG4MTBEq8Ib3_JNWr2lug';
-        var map = new mapboxgl.Map({
-          container: 'map',
-          style: 'mapbox://styles/mapbox/streets-v11',
-          center: [-76.60631917174642, 2.4419131406694277],
-          zoom: 12.5
-        });
+    mapboxgl.accessToken = 'pk.eyJ1IjoieWVyc29uYXJnb3RlIiwiYSI6ImNrcXRwMW85dTAyMHgycHBmYXhyaDNhcGgifQ.3HG4MTBEq8Ib3_JNWr2lug';
+    var map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: [-76.60631917174642, 2.4419131406694277],
+      zoom: 12.5
+    });
 
-        const marker = new mapboxgl.Marker({
-        color: "#5FAFFF",
-        draggable: false
-        }).setLngLat([-76.5994497500150, 2.446358589892211])
-        .addTo(map);
-      </script>
+    {% for evento in eventos %}
 
+      new mapboxgl.Marker({
+      color: "#5FAFFF",
+      draggable: false})
+      .setLngLat([{{evento.evento_long}}, {{evento.evento_lat}}])
+      .setPopup(
+            new mapboxgl.Popup({ offset: 25 }) // add popups
+            .setHTML("<strong>{{evento.evento_name}}</strong>"))
+      .addTo(map);
+
+    {% endfor %}
+  </script>
 </div>
+
 {% endblock %}

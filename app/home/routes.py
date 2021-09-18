@@ -5,7 +5,7 @@ from flask import (render_template, request, redirect, url_for, session,
 
 from flask_login import current_user, login_required
 
-from app.models import Inversionistas, Organizaciones, Products, Kart
+from app.models import Inversionistas, Organizaciones, Products, Kart, Eventos
 from app.admin.forms import Variations
 import random
 home = Blueprint('home', __name__)
@@ -141,6 +141,5 @@ def inversionista_details(inversionista_id):
 
 @home.route('/eventos')
 def eventos():
-    return render_template("home/eventos.html", title="Eventos")
-
-
+    eventos = Eventos.query.all()
+    return render_template("home/eventos.html", title="Eventos", eventos=eventos)
