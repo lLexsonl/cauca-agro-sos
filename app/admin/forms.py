@@ -48,8 +48,14 @@ class ProductsForm(FlaskForm):
                                 validators.DataRequired()])
     submit = SubmitField('Submit')
 
+class EventoForm(FlaskForm):
+
+    name = StringField('Name', [validators.DataRequired()])
+    lat = StringField('Latitud', [validators.DataRequired()])
+    long = StringField('Longitud', [validators.DataRequired()])
+    submit = SubmitField('Submit')
+
 
 class Variations(FlaskForm):
     amount = IntegerField('Amount', validators=[DataRequired()])
-
     submit = SubmitField('Add to Cart')

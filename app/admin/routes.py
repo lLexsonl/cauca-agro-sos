@@ -3,8 +3,8 @@ from flask import (flash, render_template, Blueprint, url_for, abort, redirect,
                    request
                    )
 from flask_login import current_user, login_required
-from app.admin.forms import OrganizacionForm, ProductsForm, InversionistaForm
-from app.models import Inversionistas, Organizaciones, Products, Orders
+from app.admin.forms import OrganizacionForm, ProductsForm, InversionistaForm, EventoForm
+from app.models import Inversionistas, Organizaciones, Products, Orders, Eventos
 from app import photos
 from config import Config
 import gc
@@ -269,7 +269,7 @@ def delete_product(id):
     return redirect(url_for('admin.list_products'))
 
 
-@admin.route('/orders/')
+@admin.route('/orders')
 @login_required
 def list_orders():
     check_admin()
@@ -398,3 +398,90 @@ def delete_inversionista(id):
     return redirect(url_for('admin.list_inversionistas'))
 
 
+@admin.route('/eventos', methods=['GET', 'POST'])
+@login_required
+def list_eventos():
+    '''
+    Get all product organizacion
+    first check if user is an admin
+    '''
+
+    check_admin()
+
+    eventos = Eventos.query.all()
+
+    return render_template('admin/eventos/eventos.html', title="Eventos", eventos=eventos)
+
+
+@admin.route('/eventos/add', methods=['GET', 'POST'])
+def add_evento():
+    """
+    add a evento to the database
+    """
+    check_admin()
+
+    add_evento = True
+
+    form = EventoForm()
+
+    if form.validate_on_submit():
+        name = Eventos.query.filter(Eventos.evento_name==form.name.data).first()
+        if name:
+            flash("Evento already exists.")
+            return render_template('admin/eventos/evento.html', action="Add", form=form,
+                           add_evento=add_evento, title="Add Evento")
+
+        evento = Eventos(
+            evento_name=form.name.data, evento_lat=form.lat.data, evento_long=form.long.data)
+        try:
+            db.session.add(evento)
+            db.session.commit()
+            flash("You have successfully added a new evento")
+            gc.collect()
+        except Exception:
+            flash('Error: Evento name already exits.')
+
+        return redirect(url_for('admin.list_eventos'))
+    return render_template('admin/eventos/evento.html', action="Add", form=form,
+                           add_evento=add_evento, title="Add Evento")
+
+
+@admin.route('/evento/edit/<int:id>', methods=["GET", "POST"])
+def edit_evento(id):
+    '''
+        Edit a evento
+    '''
+
+    check_admin()
+
+    add_evento = False
+
+    evento = Eventos.query.get_or_404(id)
+
+    form = EventoForm(obj=evento)
+    if form.validate_on_submit():
+
+        evento.evento_name = form.name.data
+        evento.evento_lat = form.lat.data
+        evento.evento_long = form.long.data
+        db.session.commit()
+        gc.collect()
+        flash("You have successfully edited the evento")
+
+        return redirect(url_for('admin.list_eventos'))
+
+    return render_template('admin/eventos/evento.html', action="Edit",
+                           add_evento=add_evento, form=form,
+                           evento=evento, title="Edit Evento")
+
+
+@admin.route('/evento/delete/<int:id>', methods=["GET", "POST"])
+def delete_evento(id):
+    evento = Eventos.query.get_or_404(id)
+
+    db.session.delete(evento)
+    db.session.commit()
+    gc.collect()
+    flash("You have successfully deleted a evento")
+
+    return redirect(url_for('admin.list_eventos'))

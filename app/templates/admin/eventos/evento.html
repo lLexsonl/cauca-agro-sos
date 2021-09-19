@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}
+{% if add_evento %}
+Add Evento
+{% else %}
+Edit Evento
+{% endif %}
+{% endblock %}
+{% block body %}
+<div class="content-section">
+  <div class="outer">
+    <div class="middle">
+      <div class="inner">
+        <div class="center">
+          {% if add_evento%}
+          <h1>Add Evento</h1>
+          {% else %}
+          <h1>Edit Evento</h1>
+          {% endif %}
+          <br />
+          <form method="POST" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+              {{ form.name.label(class="form-control-label") }}
+              {{ form.name(class="form-control form-control") }}
+            </div>
+
+            <div class="form-group">
+              {{ form.lat.label(class="form-control-label") }}
+              {{ form.lat(class="form-control-file") }}
+            </div>
+
+            <div class="form-group">
+              {{ form.long.label(class="form-control-label") }}
+              {{ form.long(class="form-control-file") }}
+            </div>
+
+            <div class="form-group">
+              {{ form.submit(class="btn btn-outline-success") }}
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
