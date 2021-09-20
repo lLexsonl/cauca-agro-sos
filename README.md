@@ -2,9 +2,7 @@
 
 1. First step, create virtual environment:
 
-  `python3 -m venv <venv>`
-
-  **<venv>** is virtual environment name.
+  `python3 -m venv <venv>`. **<venv>** is virtual environment name.
 
 2. Now activate the virtual environment:
 
@@ -24,7 +22,7 @@
 
   `.\<venv>\Scripts\Activate.ps1`
 
-For more information: [venv python](https://docs.python.org/es/3.8/library/venv.html)
+For more information: [python venv](https://docs.python.org/es/3.8/library/venv.html)
 
 3. Then install all dependencies doing
 
