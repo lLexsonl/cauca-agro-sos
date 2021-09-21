@@ -111,8 +111,7 @@ class Products(db.Model):
     product_image = db.Column(db.String(120))
     product_description = db.Column(db.String(200), index=True)
     product_stock = db.Column(db.Integer, index=True)
-    product_size = db.Column(db.String(5), index=True)
-    promotion = db.Column(db.Boolean, index=True)
+    product_cant = db.Column(db.String(5), index=True)
     promotion_value = db.Column(db.Integer, index=True)
     organizacion_id = db.Column(db.Integer, db.ForeignKey('organizaciones.id'))
 

@@ -28,9 +28,10 @@ def landing():
 @home.route('/home', methods=['GET'])
 def homepage():
     ids = []
-    c = Products.query.filter_by(promotion=True).all()
+    c = Products.query.all()
     for s in c:
-        ids.append(s.id)
+        if s.promotion_value > 0:
+            ids.append(s.id)
     sorter = []
     for i in range(3):
         random.randint(1, 1000)
