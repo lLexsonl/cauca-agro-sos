@@ -1,4 +1,5 @@
-{% block promo %}
+{% block carousel %}
+<div class="container">
   <!-- banner -->
 <div class="banner">
   <div class="xf">
@@ -11,11 +12,10 @@
       </ol>
     <div class="carousel-inner">
     <div class="carousel-item active" style="max-width:100%;">
-      <img src="{{url_for('static', filename='Oferta.png')}}" class="d-block carousel-img-height" alt="...">
+      <img src="{{url_for('static', filename='Oferta.png')}}" class="d-block carousel-img-height" alt="Oferta">
     <div class="carousel-caption d-none d-md-block">
       <p>
-        <a href="{{url_for('home.homepage')}}"> 
-        Ofertas Especiales</a> 
+        <a class="text-white bg-dark" href="{{url_for('home.homepage')}}">Ofertas Especiales</a> 
       </p>
     </div>
   </div>
@@ -24,10 +24,11 @@
 {% if i.id in sorter %}
   <div class="carousel-item" style="max-width:100%;">
     <a href="{{url_for('home.product_details',product_name = i.product_name)}}">
-    <img src="{{i.product_image}}" class="d-block  carousel-img-height" alt="...">
+      <img src="{{i.product_image}}" class="d-block carousel-img-height" alt="{{i.product_name}}">
     <div class="carousel-caption d-none d-md-block">
-      <h5>Producto en descuento</h5>
-      <p>{{i.product_name}}</p>
+      <div class="d-flex align-items-center justify-content-center">
+        <p class="text-white bg-dark">{{i.product_name}} en descuento</p>
+      </div>
     </div>
     </a>
   </div>
@@ -47,5 +48,6 @@
 </div>
 </div>  
 </div>  
+</div>
 
 {% endblock %}

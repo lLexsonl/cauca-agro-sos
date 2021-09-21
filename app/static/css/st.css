@@ -36,19 +36,19 @@
 
 .owner > a
 {
-  text-decoration: underline;
+  text-decoration: none;
   color: inherit;
 }
 
 .carousel-caption h5{
-    color:#01CFCF;
-    font-size: 2em;
+  font-size: 1.2em;
+  text-align: center;
   font-family: 'Lato', sans-serif;
 }
 
 .carousel-caption p,.carousel-caption a{
-  color:#fff;
-  font-size: 1.1em;
+  text-decoration: none;
+  font-size: 1.2em;
   font-family: 'Cabin', sans-serif;
 }
 

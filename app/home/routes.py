@@ -37,7 +37,6 @@ def homepage():
         if i in ids:
             sorter.append(i)
 
-    categories = Organizaciones.query.all()
     products = Products.query.all()
 
     if current_user.is_anonymous:
@@ -46,7 +45,7 @@ def homepage():
         count = Kart.query.filter_by(user_id=current_user.id).count()
 
     return render_template("home/index.html", title='Website name',
-                           categories=categories, products=products, count=count, sorter=sorter)
+                           products=products, count=count, sorter=sorter)
 
 
 @home.route('/canasta')
