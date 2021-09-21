@@ -3,11 +3,11 @@ from flask import (flash, render_template, Blueprint, url_for, abort, redirect,
                    request
                    )
 from flask_login import current_user, login_required
-from app.admin.forms import OrganizacionForm, ProductsForm, InversionistaForm, EventoForm
+from app.admin.forms import OrganizacionForm, ProductForm, InversionistaForm, EventoForm
 from app.models import Inversionistas, Organizaciones, Products, Orders, Eventos
 from app import photos
 from config import Config
-import gc
+import gc, unidecode
 from app import db
 
 admin = Blueprint('admin', __name__)
@@ -159,22 +159,26 @@ def add_product():
     add a product to the database
     '''
 
+    check_admin()
+
     add_product = True
 
-    form = ProductsForm()
+    form = ProductForm()
     if form.validate_on_submit():
         filename = request.files['image']
         _, f_ext = os.path.splitext(filename.filename)
-        name = form.name.data
-        picture_fn = name + f_ext
+        name = unidecode.unidecode(form.name.data).replace(' ', '')
+        id_org = form.organizaciones.data.id
+        picture_fn = f'{name}{id_org}{f_ext}'
         photos.save(filename, name=picture_fn)
         url = photos.url(picture_fn)
 
+        if form.promotion_value.data is None:
+            form.promotion_value.data = 0
+
         product = Products(product_name=form.name.data, product_price=form.price.data, product_image=url,
                            product_description=form.description.data, product_stock=form.stock.data,
-                           promotion=form.promotion.data, promotion_value=form.promotion_value.data,
-                            organizacion_id=form.organizaciones.data.id,)
-
+                           promotion_value=form.promotion_value.data, organizacion_id=form.organizaciones.data.id,)
         try:
             # add a product to the database
             db.session.add(product)
@@ -183,7 +187,7 @@ def add_product():
             flash("You have successfully added a product")
         except:
             # in case product name already exists
-            flash("Error: product name already exits")
+            flash("Error in the database")
 
         # redirect to the roles page
         return redirect(url_for('admin.list_products'))
@@ -203,16 +207,19 @@ def edit_product(id):
     add_product = False
 
     product = Products.query.get_or_404(id)
-    form = ProductsForm(obj=product)
+    form = ProductForm(obj=product)
     if form.validate_on_submit():
         filename = request.files['image']
         _, f_ext = os.path.splitext(filename.filename)
 
-        name = form.name.data
-        picture_fn = name + f_ext
+        name = unidecode.unidecode(form.name.data).replace(' ', '')
+        id_org = form.organizaciones.data.id
+        picture_fn = f'{name}{id_org}{f_ext}'
 
-        # get the name of the previous image
-        previous_img_name = picture_fn
+        # remove the changed picture from the folder
+        img_dir = Config.UPLOADED_PHOTOS_DEST+'/'
+        if os.path.exists(img_dir+picture_fn):
+            os.remove(img_dir+picture_fn)
 
         photos.save(filename, name=picture_fn)
         url = photos.url(picture_fn)
@@ -224,10 +231,6 @@ def edit_product(id):
         product.product_stock = form.stock.data
         db.session.commit()
         gc.collect()
-
-        # remove the changed picture from the folder
-        img_dir = Config.UPLOADED_PHOTOS_DEST+'/'
-        os.remove(img_dir+previous_img_name)
 
         flash('You have successfully edited a product')
         # redirect to the products page
@@ -256,7 +259,12 @@ def delete_product(id):
     # get image extension
     _, f_ext = os.path.splitext(product.product_image)
 
-    previous_img_name = product.product_name+f_ext
+    # previous_img_name = product.product_name+f_ext
+
+    name = unidecode.unidecode(product.product_name).replace(' ', '')
+    id_org = product.organizacion_id
+    previous_img_name = f'{name}{id_org}{f_ext}'
+
     img_dir = Config.UPLOADED_PHOTOS_DEST+'/'
     # remove the changed picture from the folder
     os.remove(img_dir+previous_img_name)
@@ -308,7 +316,7 @@ def add_inversionista():
     form = InversionistaForm()
 
     if form.validate_on_submit():
-        name = Inversionistas.query.filter(Inversionistas.inversionista_nombre==form.name.data).first()
+        name = Inversionistas.query.filter(Inversionistas.inversionista_name==form.name.data).first()
         if name:
             flash("Inversionista already exists.")
             return render_template('admin/inversionistas/inversionista.html', action="Add", form=form,
@@ -321,7 +329,7 @@ def add_inversionista():
         photos.save(filename, name=picture_fn)
         url = photos.url(picture_fn)
         inversionista = Inversionistas(
-            inversionista_nombre=form.name.data, inversionista_image=url, inversionista_desc=form.desc.data, inversionista_email=form.email.data)
+            inversionista_name=form.name.data, inversionista_image=url, inversionista_desc=form.desc.data, inversionista_email=form.email.data)
         try:
             db.session.add(inversionista)
             db.session.commit()
@@ -358,7 +366,7 @@ def edit_inversionista(id):
         photos.save(filename, name=picture_fn)
         url = photos.url(picture_fn)
 
-        inversionista.inversionista_nombre = form.name.data
+        inversionista.inversionista_name = form.name.data
         inversionista.inversionista_image = url
         inversionista.inversionista_desc = form.desc.data
         inversionista.inversionista_email = form.email.data
@@ -387,7 +395,7 @@ def delete_inversionista(id):
     # get image extension
     _, f_ext = os.path.splitext(inversionista.inversionista_image)
 
-    previous_img_name = inversionista.inversionista_nombre + f_ext
+    previous_img_name = inversionista.inversionista_name + f_ext
     img_dir = Config.UPLOADED_PHOTOS_DEST+'/'
     os.remove(img_dir+previous_img_name)
     db.session.delete(inversionista)

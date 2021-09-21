@@ -94,13 +94,13 @@ class Organizaciones(db.Model):
 class Inversionistas(db.Model):
     __tablename__ = 'inversionistas'
     id = db.Column(db.Integer, primary_key=True)
-    inversionista_nombre = db.Column(db.String(20), index=True)
+    inversionista_name = db.Column(db.String(20), index=True)
     inversionista_image = db.Column(db.String(120))
     inversionista_desc = db.Column(db.String(120))
     inversionista_email = db.Column(db.String(120))
 
     def __repr__(self):
-        return '<Inversionistas{}>'.format(self.organizacion_name)
+        return '<Inversionista {}>'.format(self.organizacion_name)
 
 
 class Products(db.Model):
@@ -109,9 +109,8 @@ class Products(db.Model):
     product_name = db.Column(db.String(100), index=True)
     product_price = db.Column(db.Integer, index=True)
     product_image = db.Column(db.String(120))
-    product_description = db.Column(db.String(200), index=True)
-    product_stock = db.Column(db.Integer, index=True)
-    product_cant = db.Column(db.String(5), index=True)
+    product_description = db.Column(db.String(200))
+    product_stock = db.Column(db.Integer)
     promotion_value = db.Column(db.Integer, index=True)
     organizacion_id = db.Column(db.Integer, db.ForeignKey('organizaciones.id'))
 
@@ -119,7 +118,7 @@ class Products(db.Model):
         'Orders', secondary=association_table, backref='my_orders', lazy='dynamic')
 
     def __repr__(self):
-        return '<Products {}>'.format(self.product_name)
+        return '<Product {}>'.format(self.product_name)
 
 
 class Kart(db.Model):

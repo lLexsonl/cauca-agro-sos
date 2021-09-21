@@ -27,17 +27,6 @@ def landing():
 
 @home.route('/home', methods=['GET'])
 def homepage():
-    ids = []
-    c = Products.query.all()
-    for s in c:
-        if s.promotion_value > 0:
-            ids.append(s.id)
-    sorter = []
-    for i in range(3):
-        random.randint(1, 1000)
-        if i in ids:
-            sorter.append(i)
-
     products = Products.query.all()
 
     if current_user.is_anonymous:
@@ -46,7 +35,7 @@ def homepage():
         count = Kart.query.filter_by(user_id=current_user.id).count()
 
     return render_template("home/index.html", title='Website name',
-                           products=products, count=count, sorter=sorter)
+                           products=products, count=count, len=len(products))
 
 
 @home.route('/canasta')
@@ -85,8 +74,8 @@ def organizacion_details(organizacion_name):
                            organizacion=organizacion, title=organizacion.organizacion_name)
 
 
-@home.route('/product/<string:product_name>', methods=["GET", "POST"])
-def product_details(product_name):
+@home.route('/product/<int:id>', methods=["GET", "POST"])
+def product_details(id):
     if current_user.is_anonymous:
         count = 0
     else:
@@ -95,7 +84,7 @@ def product_details(product_name):
 
     form = Variations()
 
-    product_detail = Products.query.filter_by(product_name=product_name).first_or_404()
+    product_detail = Products.query.filter_by(id=id).first_or_404()
     organizacion = Organizaciones.query.filter_by(id=product_detail.organizacion_id).first_or_404()
 
     # add to cart
@@ -104,7 +93,7 @@ def product_details(product_name):
         if current_user.is_anonymous:
             flash(
                 'Please login before you can add items to your shopping cart', 'warning')
-            return redirect(url_for("home.product_details", product_name=product_detail.product_name))
+            return redirect(url_for("home.product_details", id=product_detail.id))
         # authenticated users
         cart = Kart(user_id=user, product_id=product_detail.id,
                     quantity=form.amount.data, subtotal=product_detail.product_price)
@@ -112,7 +101,7 @@ def product_details(product_name):
         db.session.commit()
 
         flash(f"{product_detail.product_name} has been added to cart")
-        return redirect(url_for('home.product_details', product_name=product_detail.product_name))
+        return redirect(url_for('home.product_details', id=product_detail.id))
     return render_template("home/productdetails.html",
                            product_detail=product_detail, title=product_detail.product_name,
                            form=form, count=count, organizacion=organizacion)
@@ -124,7 +113,7 @@ def inversionistas():
     page = request.args.get('page', 1, type=int)
 
     inversionistas = Inversionistas.query\
-        .order_by(Inversionistas.inversionista_nombre).paginate(page=page, per_page=6)
+        .order_by(Inversionistas.inversionista_name).paginate(page=page, per_page=6)
 
     return render_template("home/inversionistas.html", title="Inversionistas", inversionistas=inversionistas)
 
@@ -136,7 +125,7 @@ def inversionista_details(inversionista_id):
         id=inversionista_id).first_or_404()
 
     return render_template("home/inversionista_details.html",
-                           inversionista=inversionista, title=inversionista.inversionista_nombre)
+                           inversionista=inversionista, title=inversionista.inversionista_name)
 
 
 @home.route('/eventos')
