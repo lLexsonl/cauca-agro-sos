@@ -40,7 +40,7 @@
 
 <div class="row d-block">
   {% for organizacion_list in organizaciones.items %}
-    <a href="{{ url_for('home.organizacion_details', organizacion_name=organizacion_list.organizacion_name) }}">
+    <a href="{{ url_for('home.organizacion_details', id=organizacion_list.id) }}">
           <div class="col l4 s12 m6">
         <div class="card-panel hoverable" style="max-height:360px; background-color:#FFFFFF;">    
           <div class="card-image" style="margin-left:auto;margin-right: auto;">

@@ -43,7 +43,7 @@ def register():
 @auth.route('/login', methods=["GET", "POST"])
 def login():
 	form = LoginForm()
-	error = ' '
+	error = ''
 	try:
 		if current_user.is_authenticated:
 			flash("you are already logged in",'info')
@@ -55,7 +55,7 @@ def login():
 				flash('Invalid username or password','warning')
 				return redirect(url_for('auth.login', form = form, title = "Login to your account"))
 			login_user(user)
-			flash("you have been successfully logged in",'success')
+			flash("You have been successfully logged in", 'success')
 			gc.collect()
 			
 			#check if user is an admin or not and login to the appropriate place
@@ -67,4 +67,4 @@ def login():
 		return render_template('login.html', form = form, title = "Login to your account")
 	except Exception as e:
 		flash(e)
-		return render_template('login.html', form= form, error= error, title = "Login to your account")
+		return render_template('login.html', form= form, error=error, title = "Login to your account")

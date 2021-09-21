@@ -54,8 +54,10 @@ def add_organizacion():
 
         filename = request.files['image']
         _, f_ext = os.path.splitext(filename.filename)
-        name = form.name.data
-        picture_fn = name + f_ext
+
+        name = unidecode.unidecode(form.name.data).replace(' ', '')
+        picture_fn = f'{name}{f_ext}'
+
         photos.save(filename, name=picture_fn)
         url = photos.url(picture_fn)
         organizacion = Organizaciones(
@@ -89,29 +91,37 @@ def edit_organizacion(id):
     if form.validate_on_submit():
         filename = request.files['image']
         _, f_ext = os.path.splitext(filename.filename)
-        name = form.name.data
-        picture_fn = name + f_ext
-        # get the name of the previous image
-        previous_img_name = picture_fn
+
+        name = unidecode.unidecode(form.name.data).replace(' ', '')
+        picture_fn = f'{name}{f_ext}'
+
+        # remove the changed picture from the folder
+        img_dir = Config.UPLOADED_PHOTOS_DEST+'/'
+        old_name = unidecode.unidecode(organizacion.organizacion_name).replace(' ', '')
+        _, old_ext = os.path.splitext(organizacion.organizacion_image)
+        old_picture_fn = f'{old_name}{old_ext}'
+
+        if os.path.exists(img_dir+old_picture_fn):
+            os.remove(img_dir+old_picture_fn)
+
         photos.save(filename, name=picture_fn)
         url = photos.url(picture_fn)
 
         organizacion.organizacion_name = form.name.data
         organizacion.organizacion_image = url
+        organizacion.organizacion_phone = form.phone.data
+        organizacion.organizacion_location = form.location.data
+
         db.session.commit()
         gc.collect()
         flash("You have successfully edited the organizacion")
-
-        # remove the changed picture from the folder
-        img_dir = Config.UPLOADED_PHOTOS_DEST+'/'
-        os.remove(img_dir+previous_img_name)
-
         # redirect to the organizacion page
         return redirect(url_for('admin.list_organizaciones'))
-    #form.description.data = category.description
     form.name.data = organizacion.organizacion_name
+    form.location.data = organizacion.organizacion_location
+    form.phone.data = organizacion.organizacion_phone
 
-    return render_template('admin/organizacion/organizacion.html', action="Edit",
+    return render_template('admin/organizaciones/organizacion.html', action="Edit",
                            add_organizacion=add_organizacion, form=form,
                            organizacion=organizacion, title="Edit Organizacion")
 
@@ -123,9 +133,13 @@ def delete_organizacion(id):
     # get image extension
     _, f_ext = os.path.splitext(organizacion.organizacion_image)
 
-    previous_img_name = organizacion.organizacion_name + f_ext
+    name = unidecode.unidecode(organizacion.organizacion_name).replace(' ', '')
+    picture_fn = f'{name}{f_ext}'
     img_dir = Config.UPLOADED_PHOTOS_DEST+'/'
-    os.remove(img_dir+previous_img_name)
+
+    if os.path.exists(img_dir+picture_fn):
+        os.remove(img_dir+picture_fn)
+
     db.session.delete(organizacion)
     db.session.commit()
     gc.collect()
@@ -218,8 +232,12 @@ def edit_product(id):
 
         # remove the changed picture from the folder
         img_dir = Config.UPLOADED_PHOTOS_DEST+'/'
-        if os.path.exists(img_dir+picture_fn):
-            os.remove(img_dir+picture_fn)
+        old_name = unidecode.unidecode(product.product_name).replace(' ', '')
+        _, old_ext = os.path.splitext(product.product_image)
+        old_picture_fn = f'{old_name}{product.organizacion_id}{old_ext}'
+
+        if os.path.exists(img_dir+old_picture_fn):
+            os.remove(img_dir+old_picture_fn)
 
         photos.save(filename, name=picture_fn)
         url = photos.url(picture_fn)
@@ -234,13 +252,12 @@ def edit_product(id):
 
         flash('You have successfully edited a product')
         # redirect to the products page
-        redirect(url_for('admin.list_products'))
+        return redirect(url_for('admin.list_products'))
 
-        form.name.data = product.product_name
-        form.price.data = product.product_price
-        form.image.data = product.product_image
-        form.description.data = product.product_description
-        form.stock.data = product.product_stock
+    form.name.data = product.product_name
+    form.price.data = product.product_price
+    form.description.data = product.product_description
+    form.stock.data = product.product_stock
 
     return render_template('admin/products/product.html', add_product=add_product,
                            form=form, title="Edit Product")
@@ -256,18 +273,16 @@ def delete_product(id):
 
     product = Products.query.get_or_404(id)
 
-    # get image extension
-    _, f_ext = os.path.splitext(product.product_image)
-
-    # previous_img_name = product.product_name+f_ext
-
     name = unidecode.unidecode(product.product_name).replace(' ', '')
     id_org = product.organizacion_id
-    previous_img_name = f'{name}{id_org}{f_ext}'
+    _, old_ext = os.path.splitext(product.product_image)
+    previous_img_name = f'{name}{id_org}{old_ext}'
 
     img_dir = Config.UPLOADED_PHOTOS_DEST+'/'
+
     # remove the changed picture from the folder
-    os.remove(img_dir+previous_img_name)
+    if os.path.exists(img_dir+previous_img_name):
+        os.remove(img_dir+previous_img_name)
 
     db.session.delete(product)
     db.session.commit()
@@ -287,6 +302,7 @@ def list_orders():
     orders = Orders.query.all()
 
     return render_template('admin/orders.html', title='Orders', orders=orders)
+
 
 @admin.route('/inversionistas', methods=['GET', 'POST'])
 @login_required
@@ -324,8 +340,10 @@ def add_inversionista():
 
         filename = request.files['image']
         _, f_ext = os.path.splitext(filename.filename)
-        name = form.name.data
-        picture_fn = name + f_ext
+
+        name = unidecode.unidecode(form.name.data).replace(' ', '')
+        picture_fn = f'{name}{f_ext}'
+
         photos.save(filename, name=picture_fn)
         url = photos.url(picture_fn)
         inversionista = Inversionistas(
@@ -359,10 +377,20 @@ def edit_inversionista(id):
     if form.validate_on_submit():
         filename = request.files['image']
         _, f_ext = os.path.splitext(filename.filename)
-        name = form.name.data
-        picture_fn = name + f_ext
+
+        name = unidecode.unidecode(form.name.data).replace(' ', '')
+        picture_fn = f'{name}{f_ext}'
+
         # get the name of the previous image
-        previous_img_name = picture_fn
+        old_name = unidecode.unidecode(inversionista.inversionista_name).replace(' ', '')
+        _, old_ext = os.path.splitext(inversionista.inversionista_image)
+        previous_img_name = f'{old_name}{old_ext}'
+
+        # remove the changed picture from the folder
+        img_dir = Config.UPLOADED_PHOTOS_DEST+'/'
+        if os.path.exists(img_dir+previous_img_name):
+            os.remove(img_dir+previous_img_name)
+
         photos.save(filename, name=picture_fn)
         url = photos.url(picture_fn)
 
@@ -374,14 +402,12 @@ def edit_inversionista(id):
         gc.collect()
         flash("You have successfully edited the organizacion")
 
-        # remove the changed picture from the folder
-        img_dir = Config.UPLOADED_PHOTOS_DEST+'/'
-        os.remove(img_dir+previous_img_name)
-
         # redirect to the organizacion page
         return redirect(url_for('admin.list_organizaciones'))
     #form.description.data = category.description
-    form.name.data = inversionista.name
+    form.name.data = inversionista.inversionista_name
+    form.desc.data = inversionista.inversionista_desc
+    form.email.data = inversionista.inversionista_email
 
     return render_template('admin/inversionistas/inversionista.html', action="Edit",
                            add_inversionista=add_inversionista, form=form,
@@ -395,9 +421,13 @@ def delete_inversionista(id):
     # get image extension
     _, f_ext = os.path.splitext(inversionista.inversionista_image)
 
-    previous_img_name = inversionista.inversionista_name + f_ext
+    old_name = unidecode.unidecode(inversionista.inversionista_name).replace(' ', '')
+    previous_img_name = f'{old_name}{f_ext}'
     img_dir = Config.UPLOADED_PHOTOS_DEST+'/'
-    os.remove(img_dir+previous_img_name)
+
+    if os.path.exists(img_dir+previous_img_name):
+        os.remove(img_dir+previous_img_name)
+
     db.session.delete(inversionista)
     db.session.commit()
     gc.collect()
@@ -421,7 +451,7 @@ def list_eventos():
     return render_template('admin/eventos/eventos.html', title="Eventos", eventos=eventos)
 
 
-@admin.route('/eventos/add', methods=['GET', 'POST'])
+@admin.route('/evento/add', methods=['GET', 'POST'])
 def add_evento():
     """
     add a evento to the database

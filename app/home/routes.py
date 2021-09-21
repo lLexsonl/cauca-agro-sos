@@ -64,11 +64,10 @@ def organizaciones():
     return render_template("home/organizaciones.html", title="Organizaciones", organizaciones=organizaciones)
 
 
-@home.route('/organizaciones/<string:organizacion_name>', methods=["GET", "POST"])
-def organizacion_details(organizacion_name):
+@home.route('/organizacion/<int:id>', methods=["GET", "POST"])
+def organizacion_details(id):
 
-    organizacion = Organizaciones.query.filter_by(
-        organizacion_name=organizacion_name).first_or_404()
+    organizacion = Organizaciones.query.filter_by(id=id).first_or_404()
 
     return render_template("home/organizacion_details.html",
                            organizacion=organizacion, title=organizacion.organizacion_name)

@@ -2,7 +2,9 @@
 
 1. First step, create virtual environment:
 
-  `python3 -m venv <venv>`. **<venv>** is virtual environment name.
+  `python3 -m venv <venv>`
+
+  - `<venv>` is virtual environment name.
 
 2. Now activate the virtual environment:
 
@@ -30,8 +32,7 @@ For more information: [python venv](https://docs.python.org/es/3.8/library/venv.
 
   If try to do `flask run` show a error related with dependency **Werkzeug==2.0.1**.
 
-  To solve this you need do:
-  [solution](https://stackoverflow.com/questions/61628503/flask-uploads-importerror-cannot-import-name-secure-filename)
+  Watch solution [here](https://stackoverflow.com/questions/61628503/flask-uploads-importerror-cannot-import-name-secure-filename)
 
   Search `flask_uploads.py` file.
 
@@ -56,3 +57,7 @@ For more information: [python venv](https://docs.python.org/es/3.8/library/venv.
 # For login as admin
   test@g.com
   test123456
+
+# To shop login with
+  user@g.com
+  user123456

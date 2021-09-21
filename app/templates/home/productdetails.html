@@ -14,7 +14,7 @@
             <h6 class="card-subtitle mt-0">Organizacion</h6>
           </div>
           <div class="col-sm">
-            <a href="{{ url_for('home.organizacion_details', organizacion_name=organizacion.organizacion_name) }} ">
+            <a href="{{ url_for('home.organizacion_details', id=organizacion.id) }} ">
               <p class="card-text mt-0">{{ organizacion.organizacion_name }}</p>
             </a>
           </div>
