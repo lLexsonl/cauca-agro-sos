@@ -1,17 +1,35 @@
+{% import "bootstrap/wtf.html" as wtf %}
 {% extends "base.html" %}
 {% block title %}{{ title }}{% endblock title%}
 {% block body %}
 
-<div class="container mt-1 mb-3 justify-content-center align-items-center"
-  <div id='map' style='width: 50rem; height: 25rem;'></div>
+<div class="container mt-1 mb-3 justify-content-center align-items-center">
+
+  <div class="row">
+    <div class="col">
+      <form class="form d-flex justify-content-center align-items-center" method="post" role="form">
+        {{ form.csrf_token() }}
+        <div class="form-group m-1">
+          {{ form.eventos(class="form-control")}}
+        </div>
+        <input id="submit" class="btn btn-outline-success" name="submit" type="submit" value="Buscar">
+      </form>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col d-flex justify-content-center align-items-center">
+      <div id='map' style='width: 50rem; height: 25rem;'></div>
+    </div>
+  </div>
   <script>
 
     mapboxgl.accessToken = 'pk.eyJ1IjoieWVyc29uYXJnb3RlIiwiYSI6ImNrcXRwMW85dTAyMHgycHBmYXhyaDNhcGgifQ.3HG4MTBEq8Ib3_JNWr2lug';
     var map = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mapbox/streets-v11',
-      center: [-76.60631917174642, 2.4419131406694277],
-      zoom: 12.5
+      center: [{{long}}, {{lat}}],
+      zoom: {{zoom}}
     });
 
     {% for evento in eventos %}
@@ -24,8 +42,8 @@
             new mapboxgl.Popup({ offset: 25 }) // add popups
             .setHTML("<strong>{{evento.evento_name}}</strong>"))
       .addTo(map);
-
     {% endfor %}
+
   </script>
 </div>
 

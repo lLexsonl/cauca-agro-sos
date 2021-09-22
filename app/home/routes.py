@@ -1,13 +1,14 @@
 from app import app, db
 from flask import (render_template, request, redirect, url_for, session,
-                   flash, Blueprint, abort
+                   flash, Blueprint, abort, json
                    )
 
 from flask_login import current_user, login_required
 
 from app.models import Inversionistas, Organizaciones, Products, Kart, Eventos
 from app.admin.forms import Variations
-import random
+from app.home.forms import SearchEvent
+
 home = Blueprint('home', __name__)
 
 
@@ -127,7 +128,15 @@ def inversionista_details(inversionista_id):
                            inversionista=inversionista, title=inversionista.inversionista_name)
 
 
-@home.route('/eventos')
+@home.route('/eventos', methods=["GET", "POST"])
 def eventos():
+    long = -76.60631917174642
+    lat = 2.4419131406694277
+    zoom = 12.5
     eventos = Eventos.query.all()
-    return render_template("home/eventos.html", title="Eventos", eventos=eventos)
+    form = SearchEvent()
+    if form.validate_on_submit():
+        long = form.eventos.data.evento_long
+        lat = form.eventos.data.evento_lat
+        zoom = 15
+    return render_template("home/eventos.html", title="Eventos", form=form, eventos=eventos, long=long, lat=lat, zoom=zoom)

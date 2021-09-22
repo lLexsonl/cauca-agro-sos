@@ -31,9 +31,9 @@ For more information: [python venv](https://docs.python.org/es/3.8/library/venv.
 
   `pip install -r requirements.txt`
 
-  If try to do `flask run` show a error related with dependency **Werkzeug==2.0.1**.
+  If try to do `flask run` show a **error** related with dependency *Werkzeug==2.0.1*.
 
-  Watch solution [here](https://stackoverflow.com/questions/61628503/flask-uploads-importerror-cannot-import-name-secure-filename)
+  Watch solution [here](https://stackoverflow.com/questions/61628503/flask-uploads-importerror-cannot-import-name-secure-filename) or follow next steps:
 
   Search `flask_uploads.py` file.
 
