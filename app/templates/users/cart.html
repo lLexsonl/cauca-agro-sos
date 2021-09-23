@@ -17,7 +17,7 @@
 					<strong>Product</strong>
 				</div>
 				<div class="col-3 col-md-2">
-						<strong>Amount</strong>
+						<strong>Stock</strong>
 				</div>
 				<div class="col-auto left">
 						<strong>Subtotal</strong>
@@ -48,16 +48,16 @@
 						</h6>
 			</div>
 			<div class="col-3 col-md-2">
-					<span class="size">Size:</span> 
-					<span class="size">{{ items.product.product_size }}</span>
+					<span class="size">{{ items.product.product_stock }}</span>
 			</div>
 
 			<div class="col-auto left">
 					<p> 
-							<span class="iso">₦</span>
+							<span class="iso">$</span>
 							<span class="item-total{{ items.id }} item-total">{{ items.subtotal }}
 						</span></p>
 			</div>
+
 			<div class="col-auto col-md-4">
 					<form action="{{url_for('users.quantity_update', id=items.id)}}" class="form-inline"
 					style="padding:0;margin:0;">

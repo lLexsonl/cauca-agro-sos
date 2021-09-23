@@ -87,6 +87,8 @@ def product_details(id):
     product_detail = Products.query.filter_by(id=id).first_or_404()
     organizacion = Organizaciones.query.filter_by(id=product_detail.organizacion_id).first_or_404()
 
+    form.amount.choices = [i+1 for i in range(product_detail.product_stock)]
+
     # add to cart
     if form.validate_on_submit():
         # annonymous users

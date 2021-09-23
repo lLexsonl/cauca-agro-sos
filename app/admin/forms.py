@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import (StringField, SubmitField, TextAreaField, IntegerField, validators)
+from wtforms import (StringField, SubmitField, TextAreaField, IntegerField, SelectField, validators)
 from wtforms.ext.sqlalchemy.fields import QuerySelectField
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 from app import photos
@@ -52,5 +52,5 @@ class EventoForm(FlaskForm):
 
 
 class Variations(FlaskForm):
-    amount = IntegerField('Amount', validators=[validators.DataRequired()])
+    amount = SelectField('Amount', validators=[validators.Optional()])
     submit = SubmitField('Add to Cart')

@@ -3,7 +3,7 @@ from flask import (render_template, request, redirect, url_for, session,
                    flash, Blueprint, jsonify
                    )
 
-from app.models import Users, ShippingInfo, Kart, Products, Orders, association_table
+from app.models import Users, ShippingInfo, Kart, Products, Orders
 
 import gc
 
@@ -79,7 +79,7 @@ def cart():
     items_subtotals = subtotals()
     # for annoymous users
     if current_user.is_anonymous:
-        flash('please login or register to be able to add a shipping address')
+        flash('Please login or register to be able to add a shipping address')
         return render_template('users/cart.html', count=count, cartlist=cartlist,
                                title="Cart", form=form, price=price, items_subtotals=items_subtotals)
 
@@ -169,7 +169,7 @@ def profile():
         db.session.add(info)
         db.session.commit()
         gc.collect()
-        flash('shipping information was submitted successfully', 'success')
+        flash('Shipping information was submitted successfully', 'success')
         return redirect(url_for('users.profile'))
     return render_template('users/profile.html', title="Account page", form=form,
                            shipping=shipping, count=count, order=order, items=items)

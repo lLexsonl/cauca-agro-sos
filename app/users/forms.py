@@ -1,12 +1,10 @@
 from flask_wtf import FlaskForm
 from wtforms import(StringField, IntegerField, PasswordField,
-                    SubmitField, validators, SelectField)
+                    SubmitField, validators)
 
 from wtforms.validators import ValidationError, DataRequired, Email
 
 from app.models import Users
-
-from flask_login import current_user
 
 
 class CartForm(FlaskForm):
