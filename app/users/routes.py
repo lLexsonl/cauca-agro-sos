@@ -22,37 +22,23 @@ def ShippingPrice():
     calculate the price of shipping if items is greater than 5 shipping is 2500
     else 1200
     '''
-    if current_user.is_authenticated:
-        # check this otherwise revert to
-        #item_num = Kart.query.filter_by(user_id = Kart.user_id).count()
-        item_num = Kart.query.filter_by(user_id=current_user.id).count()
-    else:
-        item_num = Kart.query.filter_by(user_id=0).count()
-
     shipping_price = 0
-    if item_num >= 1:
-        shipping_price = 1200
-    elif item_num >= 5:
-        shipping_price = 2500
-    else:
-        pass
+    if current_user.is_authenticated:
+        items = Kart.query.filter_by(user_id=current_user.id).all()
+        acum = 0
+        for item in items:
+            acum += item.quantity
+        shipping_price = (int(acum / 10) + 1) * 2500
     return shipping_price
 
 
 def subtotals():
+    subtotals = 0
     if current_user.is_authenticated:
-        # check this otherwise revert to
-        #item_num = Kart.query.filter_by(user_id = Kart.user_id).count()
-        get_products = Kart.query.filter_by(user_id=current_user.id).all()
-    else:
-        get_products = Kart.query.filter_by(user_id=0).all()
-
-    items_subtotal = 0
-    #get_products = Kart.query.filter_by(user_id = Kart.user_id).all()
-
-    for price in get_products:
-        items_subtotal += int(price.subtotal)
-    return items_subtotal
+        products = Kart.query.filter_by(user_id=current_user.id).all()
+        for product in products:
+            subtotals += product.subtotal
+    return subtotals
 
 
 @users.route('/test')

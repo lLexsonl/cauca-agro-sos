@@ -18,8 +18,6 @@ class ShippingForm(FlaskForm):
     postcode = IntegerField('Postal code', validators=[DataRequired()])
     city = StringField('City', validators=[DataRequired()])
     state = StringField('State', validators=[DataRequired()])
-    #country = SelectField('Country', validators=[DataRequired()])
-    #country = StringField('Country', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 
@@ -35,11 +33,6 @@ class RequestResetForm(FlaskForm):
 
 
 class ResetPasswordForm(FlaskForm):
-
-    password = PasswordField('Password', [validators.Length(min=8, max=25, message="Password must be 8 to 25 characters long"), validators.Required()]
-                             )
-
-    confirm = PasswordField('Repeat Password', [validators.EqualTo('password', message="Passwords must match.")]
-                            )
-
+    password = PasswordField('Password', [validators.Length(min=8, max=25, message="Password must be 8 to 25 characters long"), validators.Required()])
+    confirm = PasswordField('Repeat Password', [validators.EqualTo('password', message="Passwords must match.")])
     submit = SubmitField('Reset Password')

@@ -97,8 +97,9 @@ def product_details(id):
                 'Please login before you can add items to your shopping cart', 'warning')
             return redirect(url_for("home.product_details", id=product_detail.id))
         # authenticated users
+        subtotal = (int(form.amount.data)) * (product_detail.product_price - (product_detail.product_price * (product_detail.promotion_value/100)))
         cart = Kart(user_id=user, product_id=product_detail.id,
-                    quantity=form.amount.data, subtotal=product_detail.product_price)
+                    quantity=form.amount.data, subtotal=subtotal)
         db.session.add(cart)
         db.session.commit()
 

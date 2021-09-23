@@ -4,31 +4,33 @@
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 <link href="{{ url_for('static', filename='css/cart.css')}}" rel="stylesheet">
 <div class="container">
-		{% if current_user.is_authenticated %}
-
 
 	<div class="container">
-		<div class="row hide">
-				<div class="col-1">
-						
+		<div class="row">
+
+				<div class="col">
 				</div>
 			
-				<div class="col-6 col-md-3">
+				<div class="col">
 					<strong>Product</strong>
 				</div>
-				<div class="col-3 col-md-2">
-						<strong>Stock</strong>
+				<div class="col">
+						<strong>Price</strong>
 				</div>
-				<div class="col-auto left">
-						<strong>Subtotal</strong>
+				<div class="col">
+						<strong>Promotion</strong>
 				</div>
 
-				<div class="col-auto col-md-3">
+				<div class="col">
 						<strong>Quantity</strong>
 				</div>
 
-				<div class="col-3 col-md-2">
-						<strong></strong>
+				<div class="col">
+						<strong>Subtotal</strong>
+				</div>
+
+				<div class="col">
+						<strong>Remove</strong>
 				</div>
 
 		</div>
@@ -37,335 +39,60 @@
 
 		<div class="row">
 
-			<div class="col-1">
+			<div class="col">
 				<img src="{{ items.product.product_image }}" class="item-img img-responsive"/>
-
 			</div>	
-			<div class="col-6 col-md-3">
-				
-					<h6 class="nomargin">
-							<p>{{ items.product.product_name }}</p>
-						</h6>
-			</div>
-			<div class="col-3 col-md-2">
-					<span class="size">{{ items.product.product_stock }}</span>
+
+			<div class="col">
+        <h6 class="nomargin">
+            <p>{{ items.product.product_name }}</p>
+        </h6>
 			</div>
 
-			<div class="col-auto left">
-					<p> 
-							<span class="iso">$</span>
-							<span class="item-total{{ items.id }} item-total">{{ items.subtotal }}
-						</span></p>
+			<div class="col">
+        <span class="iso">$</span>
+        <span class="iso">{{ items.product.product_price }}</span>
 			</div>
 
-			<div class="col-auto col-md-4">
-					<form action="{{url_for('users.quantity_update', id=items.id)}}" class="form-inline"
-					style="padding:0;margin:0;">
+			<div class="col">
+        <span class="iso">{{ items.product.promotion_value}}</span>
+        <span class="iso">%</span>
+			</div>
+
+			<div class="col">
 						<p>
-							<input id="minus-btn" type="button" class="minus-btn{{items.id}} btn btn-sm btn-outline-info" value="-">
-
-								<input type="text" name="quantity" class="qty form-control-sm"
-								id="qty{{items.id}}" value="{{items.quantity}}" readonly>
-
-
-							<input id="plus-btn" type="button" class="plus-btn{{items.id}} 	btn btn-sm btn-outline-info" value="+">
-
-							 <span class="times">x</span> <span class="iso">$</span> <span class="item-price{{items.id}}"> {{ items.product.product_price }}</span>
+              <input type="text" name="quantity" class="qty form-control-sm" id="qty{{items.id}}" value="{{items.quantity}}" readonly>
+              <span class="times">x</span>
+              <span class="iso">$</span>
+              <span class="item-price{{items.id}}">{{ items.product.product_price }}</span>
 						</p>
-						
-					</form>
 			</div>
-			<div class="col-3 col-md-2 actions">
 
-					<a href="{{ url_for('users.remove_item', id=items.id) }}"
-					class=" btn btn-outline-danger btn-sm">x</a>
-					
-					<div id="loading{{items.id}}" class="spinner-border spinner-border-sm text-success temp_hidden" role="status">
-							<span class="sr-only">Loading...</span>
-						  </div>
-						  <div id="loading_{{items.id}}" class="spinner-grow spinner-grow-sm text-success temp_hidden" role="status">
-							<span class="sr-only">Loading...</span>
-					</div>
+			<div class="col">
+        <p> 
+            <span class="iso">$</span>
+            <span class="item-total">{{ items.subtotal }}</span>
+        </p>
 			</div>
-			
+
+			<div class="col">
+					<a href="{{ url_for('users.remove_item', id=items.id) }}" class=" btn btn-outline-danger btn-sm">x</a>
+			</div>
 		</div>
+    <!-- end row -->
 		<div class="line"></div>
 		{% endfor %}
-		<div class="table-crt">
-				<strong>Subtotal</strong>
-				<span id="subtotal_value">{{items_subtotals}}</span>
-				<strong>Shipping</strong>
-				{{ price }}
-				<strong>Total</strong>
-				<strong><span id ="total-final">{{items_subtotals + price}}</span></strong>
 
+    <div class="container d-flex justify-content-center align-items-center">
+      <span class="m-2"><strong>Subtotal</strong>: {{items_subtotals}}</span>
+      <span class="m-2"><strong>Shipping</strong>: {{ price }}</span>
+      <span class="m-2"><strong>Total</strong>: {{items_subtotals + price}}</span>
 		</div>
 
-				
+    <div class="container">
 					<a href="{{ url_for('home.homepage') }}" class="btn btn-outline-dark continue-shopping"><i class="fa fa-angle-left"></i> Continue Shopping</a>
-					
-					<a href="#" class="btn btn-success checkout-btn float-right" data-toggle="modal"
-						data-target="#exampleModalCenter">Checkout</a>
-										<!-- Modal -->
-						<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-								<div class="modal-dialog modal-dialog-centered" role="document">
-									<div class="modal-content">
-									<div class="modal-header">
-										<h5 class="modal-title" id="exampleModalCenterTitle">Select Payment Method</h5>
-										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-										<span aria-hidden="true">&times;</span>
-										</button>
-									</div>
-									<div class="modal-body">
-											<div class="row">
-													<div class="col-md-4">
-															<script type="text/javascript" src="https://ravesandboxapi.flutterwave.com/flwv3-pug/getpaidx/api/flwpbf-inline.js"></script>
-															<form method="POST">
-																<script src="https://api.ravepay.co/flwv3-pug/getpaidx/api/flwpbf-inline.js"></script>
-																<button type="button" onClick="payWithRave()" class="btn btn-outline-success">Ravepay</button>
-															</form>
-													</div>
-													<div class="col-md-4">other payment method</div>
-												</div>
-											
-									</div>
-									
-									</div>
-								</div>
-								</div>
-</div>
+					<a href="#" class="btn btn-success checkout-btn float-right" data-toggle="modal" data-target="#exampleModalCenter">Checkout</a>
+    </div>
 
-
-	</div>
-</div>
-{% for items in cartlist %}
-<script>
-	$(document).ready(function(){
-
-		$('.minus-btn{{items.id}}').on('click', function(e) {
-    		e.preventDefault();
-    		var quantity =parseInt($("#qty{{items.id}}").val());
-    		if (quantity > 1) {
-    			quantity = quantity - 1;
-    		} else {
-    			quantity = 1;
-			}
-			
-			//$("#loading{{items.id}}").addClass("loading");
-			req = $.ajax({
-			url:"{{url_for('users.quantity_update',id = items.id)}}",
-			type:"POST",
-			data: {quantity:quantity},
-
-			beforeSend: function(){
-				$("#loading{{items.id}}").removeClass("temp_hidden");
-				$("#loading_{{items.id}}").removeClass("temp_hidden");
-				
-				$("#qty{{items.id }}").prop('disabled', true);
-				$(".minus-btn{{items.id}}").prop('disabled', true);
-				$(".plus-btn{{items.id}}").prop('disabled', true);
-			},
-			success: function(data){
-                setTimeout(function() {
-					$("#loading{{items.id}}").addClass("temp_hidden");
-					$("#loading_{{items.id}}").addClass("temp_hidden");
-					
-					$("#qty{{items.id }}").prop('disabled', false);
-					$(".minus-btn{{items.id }}").prop('disabled', false);
-					$(".plus-btn{{items.id}}").prop('disabled', false);
-					
-					new_price = $(".item-total{{items.id}}").text(data.item_total).fadeOut(100).fadeIn(1000);
-					$("#subtotal_value").text(data.subtotal);
-					$("#total-final").text(parseFloat($("#subtotal_value").text()) + parseFloat({{price}}));
-                }, 2500);
-            }
-			});
-			
-
-			$("#qty{{items.id}}").val(quantity)
-
-		});
-
-		$('.plus-btn{{items.id}}').on('click', function(e){
-			e.preventDefault();
-			var quantity = parseInt($('#qty{{items.id}}').val())
-			if (quantity<20){
-				quantity = quantity +1;
-			}else{
-				quantity = 20;
-
-			}
-			$.ajax({
-			url:"{{url_for('users.quantity_update',id = items.id)}}",
-			type:"POST",
-			data: {quantity:quantity},
-
-			beforeSend: function(){
-				$("#loading{{items.id}}").removeClass("temp_hidden");
-				$("#loading_{{items.id}}").removeClass("temp_hidden");
-
-				$("#qty{{items.id }}").prop('disabled', true);
-				$(".minus-btn{{items.id }}").prop('disabled', true);
-				$(".plus-btn{{items.id}}").prop('disabled', true);
-			},
-			success: function(data){
-                setTimeout(function() {
-					$("#loading{{items.id}}").addClass("temp_hidden");
-					$("#loading_{{items.id}}").addClass("temp_hidden");
-
-					$("#qty{{items.id }}").prop('disabled', false);
-					$(".minus-btn{{items.id }}").prop('disabled', false);
-					$(".plus-btn{{items.id }}").prop('disabled', false);
-					new_price = $(".item-total{{items.id}}").text(data.item_total).fadeOut(100).fadeIn(1000);
-					$("#subtotal_value").text(data.subtotal);
-					$("#total-final").text(parseFloat($("#subtotal_value").text()) + parseFloat({{price}}));
-                }, 2500);
-            }
-			});
-
-			$("#qty{{items.id}}").val(quantity)
-			});
-
-
-
-
-		$(document).on('blur','#qty{{items.id }}', function(){
-		var quantity =parseInt($("#qty{{items.id}}").val());
-		//$("#subtotal_value").text(subtotal);
-		$("#qty{{items.id }}").addClass("disabled");
-		
-		$.ajax({
-			url:"{{url_for('users.quantity_update',id = items.id)}}",
-			type:"POST",
-			data: {quantity:quantity},
-
-			beforeSend: function(){
-				$("#loading{{items.id}}").removeClass("temp_hidden");
-				$("#loading_{{items.id}}").removeClass("temp_hidden");
-
-				$("#qty{{items.id }}").prop('disabled', true);
-				$(".minus-btn{{items.id }}").prop('disabled', true);
-				$(".plus-btn{{items.id}}").prop('disabled', true);
-				
-			},
-			success: function(data){
-                setTimeout(function() {
-					$("#loading{{items.id}}").addClass("temp_hidden");
-					$("#loading_{{items.id}}").addClass("temp_hidden");
-					
-					$("#qty{{items.id }}").prop('disabled', false);
-					$(".minus-btn{{items.id }}").prop('disabled', false);
-					$(".plus-btn{{items.id }}").prop('disabled', false);
-
-					new_price = $(".item-total{{items.id}}").text(data.item_total).fadeOut(100).fadeIn(1000);
-					$("#subtotal_value").text(data.subtotal);
-					$("#total-final").text(parseFloat($("#subtotal_value").text()) + parseFloat({{price}}));
-                }, 2500);
-            }
-		});
-
-		});
-});
-
-</script>
-
-
-<script>
-		const API_publicKey = "FLWPUBK_TEST-fe0814ab10b8b42b0499ae3ad269ddeb-X";
-	
-		function payWithRave() {
-			var x = getpaidSetup({
-				PBFPubKey: API_publicKey,
-				customer_email: "{{current_user.email }}",
-				amount: {{items_subtotals + price}},
-				customer_phone: "{{current_user.phonenumber }}",
-				currency: "NGN",
-				txref: "rave-123456",
-				onclose: function() {},
-				callback: function(response) {
-					var txref = response.tx.txRef; // collect txRef returned and pass to a 					server page to complete status check.
-					console.log("This is the response returned after a charge", response);
-					
-					if (
-						response.tx.chargeResponseCode == "00" ||
-						response.tx.chargeResponseCode == "0"
-					) {
-						
-						// redirect to a success page
-						window.location = "{{url_for('users.success')}}"; //Add your success page here
-					} else {
-						// redirect to a failure page.
-						window.location = "{{url_for('users.failed')}}";
-					}
-	
-					x.close(); // use this to close the modal immediately after payment.
-				}
-			});
-		}
-	</script>
-	
-	{% endfor %}
-	
-
-{% else %}
-
-	<table id="cart" class="table table-hover table-condensed">
-    				<thead>
-						<tr>
-							<th style="width:55%">Product</th>
-							<th style="width:15%">Price</th>
-							<th style="width:20%">Quantity</th>
-							<th style="width:10%"></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr>
-							<td data-th="Product">
-								<div class="row">
-
-								</div>
-							</td>
-							<td data-th="Price"><p> 
-							</td>
-							
-							<td data-th="Quantity">
-							</td>
-
-							<td class="actions" data-th="">			
-							</td>
-						</tr>
-					</tbody>
-
-					<tfoot>
-						<tr class="visible-xs">
-								<th colspan="1"><strong></strong></th>
-							<th ><strong>Subtotal</strong></th>
-							<td class="text-right">0</td>
-						</tr>
-						<tr class="visible-xs">
-								<th colspan="1"><strong></strong></th>
-							<th ><strong>Shipping</strong></th>
-							<td class="text-right">0</td>
-						</tr>
-						
-
-						<tr class="visible-xs">
-								<th colspan="1"><strong></strong></th>
-							<th ><strong>Total</strong></th>
-							<td class="text-right"><strong>0</strong></td>
-						</tr>
-						<tr>
-							<td><a href="#" class="btn btn-warning"><i class="fa fa-angle-left"></i> Continue Shopping</a></td>
-							<td colspan="2" class="hidden-xs"></td>
-							<td><a href="#" class="btn btn-success btn-block">Checkout <i class="fa fa-angle-right"></i></a></td>
-												
-						</tr>
-					</tfoot>
-				</table>
-
-
-
-{% endif %}
-
-
+    <!-- Modal -->
 {% endblock %}
