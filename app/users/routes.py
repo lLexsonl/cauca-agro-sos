@@ -172,7 +172,7 @@ If you did not make this request simply ignore this request and no changes will 
     mail.send(msg)
 
 
-@users.route('/profile/reset_password/', methods=["GET", "POST"])
+@users.route('/profile/reset_password', methods=["GET", "POST"])
 def reset_request():
     if current_user.is_authenticated:
         return redirect(url_for('home.homepage'))
@@ -186,7 +186,7 @@ def reset_request():
                            form=form)
 
 
-@users.route('/profile/reset_password/<token>/', methods=["GET", "POST"])
+@users.route('/profile/reset_password/<token>', methods=["GET", "POST"])
 def reset_token(token):
     if current_user.is_authenticated:
         return redirect(url_for('home.homepage'))

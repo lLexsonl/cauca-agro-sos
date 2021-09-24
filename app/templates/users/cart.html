@@ -90,9 +90,35 @@
 		</div>
 
     <div class="container">
-					<a href="{{ url_for('home.homepage') }}" class="btn btn-outline-dark continue-shopping"><i class="fa fa-angle-left"></i> Continue Shopping</a>
-					<a href="#" class="btn btn-success checkout-btn float-right" data-toggle="modal" data-target="#exampleModalCenter">Checkout</a>
+      <a href="{{ url_for('home.homepage') }}" class="btn btn-outline-dark continue-shopping"><i class="fa fa-angle-left"></i>Continue Shopping</a>
+      <a href="#" class="btn btn-success checkout-btn float-right" data-toggle="modal" data-target="#exampleModalCenter">Checkout</a>
     </div>
 
     <!-- Modal -->
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Confirmaci&oacute;n de Compra</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+          
+            <div class="container d-flex justify-content-center align-items-center">
+              <span class="m-2"><strong>Subtotal</strong>: {{items_subtotals}}</span>
+              <span class="m-2"><strong>Shipping</strong>: {{ price }}</span>
+              <span class="m-2"><strong>Total</strong>: {{items_subtotals + price}}</span>
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <a href="{{ url_for('home.homepage') }}" class="btn btn-outline-primary">Finalizar Compra</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
 {% endblock %}
