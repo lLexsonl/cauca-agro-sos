@@ -58,9 +58,7 @@ def cart():
         cartlist = Kart.query.filter_by(user_id=user).all()
 
     form = CartForm()
-    # fetch cart data
 
-    #shipping = ShippingInfo.query.all()
     price = ShippingPrice()
     items_subtotals = subtotals()
     # for annoymous users
