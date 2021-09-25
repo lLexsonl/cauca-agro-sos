@@ -242,11 +242,13 @@ def edit_product(id):
         photos.save(filename, name=picture_fn)
         url = photos.url(picture_fn)
 
+        product.organizacion_id = form.organizaciones.data.id 
         product.product_name = form.name.data
         product.product_price = form.price.data
         product.product_image = url
         product.product_description = form.description.data
         product.product_stock = form.stock.data
+        product.promotion_value = form.promotion_value.data
         db.session.commit()
         gc.collect()
 
@@ -258,6 +260,7 @@ def edit_product(id):
     form.price.data = product.product_price
     form.description.data = product.product_description
     form.stock.data = product.product_stock
+    form.promotion_value.data = product.promotion_value
 
     return render_template('admin/products/product.html', add_product=add_product,
                            form=form, title="Edit Product")

@@ -54,7 +54,7 @@ def canasta():
     return render_template("home/canasta.html", title="Canasta Agricola", products=products, count=count)
 
 
-@home.route('/organizaciones')
+@home.route('/organizacion')
 def organizaciones():
 
     page = request.args.get('page', 1, type=int)
@@ -110,7 +110,7 @@ def product_details(id):
                            form=form, count=count, organizacion=organizacion)
 
 
-@home.route('/inversionistas')
+@home.route('/inversionista')
 def inversionistas():
 
     page = request.args.get('page', 1, type=int)
@@ -121,7 +121,7 @@ def inversionistas():
     return render_template("home/inversionistas.html", title="Inversionistas", inversionistas=inversionistas)
 
 
-@home.route('/inversionistas/<int:inversionista_id>', methods=["GET", "POST"])
+@home.route('/inversionista/<int:inversionista_id>', methods=["GET", "POST"])
 def inversionista_details(inversionista_id):
 
     inversionista = Inversionistas.query.filter_by(

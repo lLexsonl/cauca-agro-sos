@@ -46,7 +46,7 @@ def login():
 	error = ''
 	try:
 		if current_user.is_authenticated:
-			flash("you are already logged in",'info')
+			flash("You are already logged in",'info')
 			return redirect(url_for('home.homepage'))
 		if form.validate_on_submit():
 			
@@ -63,7 +63,6 @@ def login():
 				return redirect(url_for('home.admin_dashboard'))
 			else:
 				return redirect(url_for('home.homepage'))
-			
 		return render_template('login.html', form = form, title = "Login to your account")
 	except Exception as e:
 		flash(e)
