@@ -107,12 +107,14 @@ If you did not make this request simply ignore this request and no changes will 
 
 
 @login_required
-@users.route('/order/<int:user>/<int:shipping>/<int:kart>', methods=["GET", "POST"])
-def order(user, shipping, kart):
+@users.route('/order/<int:user>/<int:shipping>', methods=["GET", "POST"])
+def order(user, shipping):
 
-    order = Orders(user_id=user, shipping_id=shipping, kart_id=kart)
-    db.session.add(order)
-    db.session.commit()
+    karts = Kart.query.filter_by(user_id=user).all()
+    for kart in karts:
+        order = Orders(user_id=user, shipping_id=shipping, kart_id=kart.id)
+        db.session.add(order)
+        db.session.commit()
     return redirect(url_for('users.profile'))
 
 

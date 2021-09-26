@@ -29,13 +29,12 @@
 
 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
         <div class="center">
-                {% for order in orders %}
                 <div class="container">
                   <table class="table table-borderless">
-                    <p><strong>Fecha de Orden</strong>: {{ order.timestamp.strftime('%d-%m-%Y,  %H:%M:%S')}}</p>
                           <thead>
                             <tr>
                               <th scope="col">Orden n&uacute;mero</th>
+                              <th scope="col">Fecha</th>
                               <th scope="col">User</th>
                               <th scope="col">Kart</th>
                               <th scope="col">Shipping</th>
@@ -46,6 +45,7 @@
                           {% for order in orders %}
                           <tr>
                               <td>{{ order.id }}</td>
+                              <td>{{ order.timestamp.strftime('%d-%m-%Y,  %H:%M:%S')}}</td>
                               <td>{{ order.user.firstname }}</td>
                               <td>{{ order.kart.subtotal }}</td>
                               <td>{{ order.shipping.address }}</td>
@@ -54,7 +54,6 @@
                           </tbody>
                   </table>
                 </div>
-                {% endfor %}
         </div>
 </div>
 

@@ -144,7 +144,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <a href="{{ url_for('users.order', user=user.id, shipping=shipping.id, kart=user.kart.id) }}" class="btn btn-outline-primary">Finalizar Compra</a>
+            <a href="{{ url_for('users.order', user=user.id, shipping=shipping.id) }}" class="btn btn-outline-primary">Finalizar Compra</a>
           </div>
         </div>
       </div>
