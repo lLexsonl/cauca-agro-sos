@@ -2,7 +2,7 @@ from flask import (render_template, request, redirect, url_for,
                    flash, Blueprint, jsonify
                    )
 
-from app.models import Users, Shipping, Kart, Orders
+from app.models import Products, Purchase, Users, Shipping, Kart, Orders
 
 import gc
 
@@ -111,10 +111,24 @@ If you did not make this request simply ignore this request and no changes will 
 def order(user, shipping):
 
     karts = Kart.query.filter_by(user_id=user).all()
+
+
     for kart in karts:
-        order = Orders(user_id=user, shipping_id=shipping, kart_id=kart.id)
+        product = Products.query.get_or_404(kart.product_id)
+        product.product_stock = product.product_stock - kart.quantity
+        db.session.commit()
+
+        purchase = Purchase(product_id=kart.product_id, quantity=kart.quantity, subtotal=kart.subtotal, user_id=kart.user_id)
+        db.session.add(purchase)
+        db.session.commit()
+
+        order = Orders(user_id=user, shipping_id=shipping, purchase_id=purchase.id)
         db.session.add(order)
         db.session.commit()
+
+        db.session.delete(kart)
+        db.session.commit()
+
     return redirect(url_for('users.profile'))
 
 

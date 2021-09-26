@@ -36,7 +36,7 @@
                               <th scope="col">Orden n&uacute;mero</th>
                               <th scope="col">Fecha</th>
                               <th scope="col">User</th>
-                              <th scope="col">Kart</th>
+                              <th scope="col">Purchase</th>
                               <th scope="col">Shipping</th>
                             </tr>
                           </thead>
@@ -47,7 +47,7 @@
                               <td>{{ order.id }}</td>
                               <td>{{ order.timestamp.strftime('%d-%m-%Y,  %H:%M:%S')}}</td>
                               <td>{{ order.user.firstname }}</td>
-                              <td>{{ order.kart.subtotal }}</td>
+                              <td>{{ order.purchase.subtotal }}</td>
                               <td>{{ order.shipping.address }}</td>
                           </tr>
                           {% endfor %}

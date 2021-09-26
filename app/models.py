@@ -121,10 +121,24 @@ class Kart(db.Model):
     # user and kart is one to one relationship
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
 
-    order = db.relationship('Orders', uselist=False, backref='kart')
+    def __repr__(self):
+        return '<Cart {}>'.format(self.id)
+
+
+class Purchase(db.Model):
+    __tablename__ = 'purchase'
+    id = db.Column(db.Integer, primary_key=True)
+    product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
+    product = db.relationship('Products', uselist=False)
+    quantity = db.Column(db.Integer)
+    subtotal = db.Column(db.Integer) # TODO: Esto se puede quitar
+    # user and kart is one to one relationship
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    order = db.relationship('Orders', uselist=False, backref='purchase')
 
     def __repr__(self):
         return '<Cart {}>'.format(self.id)
+
 
 
 class Orders(db.Model):
@@ -133,7 +147,7 @@ class Orders(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     shipping_id = db.Column(db.Integer, db.ForeignKey('shipping.id'))
-    kart_id = db.Column(db.Integer, db.ForeignKey('kart.id'))
+    purchase_id = db.Column(db.Integer, db.ForeignKey('purchase.id'))
 
     def __repr__(self):
         return '<Orders {}>'.format(self.timestamp)
