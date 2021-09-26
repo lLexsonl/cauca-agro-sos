@@ -1,13 +1,12 @@
-from app import app
-from flask import (render_template, request, redirect, url_for, session,
+from flask import (render_template, request, redirect, url_for,
                    flash, Blueprint, jsonify
                    )
 
-from app.models import Users, ShippingInfo, Kart, Products, Orders
+from app.models import Users, Shipping, Kart, Orders
 
 import gc
 
-from flask_login import (current_user, login_user, logout_user, login_required
+from flask_login import (current_user, login_required
                          )
 from app.users.forms import (ShippingForm, RequestResetForm, ResetPasswordForm,
                              CartForm)
@@ -48,20 +47,20 @@ def cart():
         count = 0
         user = 0
         cartlist = []
-        shippingInfo = None
+        shipping = None
     else:
         user = current_user.id
-        user_ifo = Users.query.get(user);
+        user_info = Users.query.get(user)
         count = Kart.query.filter_by(user_id=user).count()
         cartlist = Kart.query.filter_by(user_id=user).all()
-        shippingInfo = ShippingInfo.query.filter_by(user_id=user).first()
+        shipping = Shipping.query.filter_by(user_id=user).first()
 
     form = CartForm()
 
     price = ShippingPrice()
     items_subtotals = subtotals()
 
-    if shippingInfo is None:
+    if shipping is None:
         flash('Please fill shipping information.')
         return redirect(url_for('users.profile'))
 
@@ -69,10 +68,10 @@ def cart():
     if current_user.is_anonymous:
         flash('Please login or register to be able to add a shipping address')
         return render_template('users/cart.html', count=count, cartlist=cartlist,
-                               title="Cart", form=form, price=price, items_subtotals=items_subtotals, shipping=shippingInfo)
+                               title="Cart", form=form, price=price, items_subtotals=items_subtotals, shipping=shipping)
 
     return render_template('users/cart.html', count=count, cartlist=cartlist,
-                           title="Cart", form=form, price=price, items_subtotals=items_subtotals, shipping=shippingInfo, user=user_ifo)
+                           title="Cart", form=form, price=price, items_subtotals=items_subtotals, shipping=shipping, user=user_info)
 
 
 @users.route('/cart/update/<int:id>', methods=["POST"])
@@ -111,7 +110,7 @@ If you did not make this request simply ignore this request and no changes will 
 @users.route('/order/<int:user>/<int:shipping>/<int:kart>', methods=["GET", "POST"])
 def order(user, shipping, kart):
 
-    order = Orders(user_id=user, shippinginfo_id=shipping, kart_id=kart)
+    order = Orders(user_id=user, shipping_id=shipping, kart_id=kart)
     db.session.add(order)
     db.session.commit()
     return redirect(url_for('users.profile'))
@@ -151,7 +150,8 @@ def profile():
     if current_user.is_anonymous:
         count = 0
         user = 0
-
+        orders = None
+        items = None
     else:
         user = current_user.id
         count = Kart.query.filter_by(user_id=user).count()
@@ -159,9 +159,9 @@ def profile():
         items = Kart.query.filter_by(user_id=user).all()
 
     form = ShippingForm()
-    shipping = ShippingInfo.query.filter_by(user_id=user).all()
+    shipping = Shipping.query.filter_by(user_id=user).all()
     if form.validate_on_submit():
-        info = ShippingInfo(address=form.address.data, aditional_indications=form.additional.data,
+        info = Shipping(address=form.address.data, aditional_indications=form.additional.data,
                             postcode=form.postcode.data, city=form.city.data,
                             state=form.state.data, country=request.form['country'], user_id=user)
         db.session.add(info)

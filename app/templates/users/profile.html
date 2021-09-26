@@ -30,26 +30,30 @@
 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
         <div class="center">
                 {% for order in orders %}
-                
-                <table class="table table-borderless">
-                        <caption style="text-align:center;">Orders as of  {{ order.timestamp.strftime('%d-%m-%Y,  %H:%M:%S')}}</caption>
-                        <thead>
+                <div class="container">
+                  <table class="table table-borderless">
+                    <p><strong>Fecha de Orden</strong>: {{ order.timestamp.strftime('%d-%m-%Y,  %H:%M:%S')}}</p>
+                          <thead>
+                            <tr>
+                              <th scope="col">Orden n&uacute;mero</th>
+                              <th scope="col">User</th>
+                              <th scope="col">Kart</th>
+                              <th scope="col">Shipping</th>
+                            </tr>
+                          </thead>
+
+                          <tbody>
+                          {% for order in orders %}
                           <tr>
-                            <th scope="col">Name</th>
-                            <th scope="col">Total</th>
+                              <td>{{ order.id }}</td>
+                              <td>{{ order.user.firstname }}</td>
+                              <td>{{ order.kart.subtotal }}</td>
+                              <td>{{ order.shipping.address }}</td>
                           </tr>
-                        </thead>
-
-                        <tbody>
-                        {%for order in orders %}
-                        <tr>
-                            <td>{{ current_user.firstname }}</td>
-                            <td>{{ order.kart_id }}</td>
-                        </tr>
-                        {% endfor %}
-                        </tbody>
-                      </table>
-
+                          {% endfor %}
+                          </tbody>
+                  </table>
+                </div>
                 {% endfor %}
         </div>
 </div>

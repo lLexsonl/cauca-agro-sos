@@ -5,14 +5,6 @@ from flask_login import UserMixin
 from itsdangerous import TimedJSONWebSignatureSerializer as serializer
 
 
-association_table = db.Table('association',
-                             db.Column('products', db.Integer,
-                                       db.ForeignKey('products.id')),
-                             db.Column('orders', db.Integer,
-                                       db.ForeignKey('orders.id'))
-                             )
-
-
 class Users(UserMixin, db.Model):
 
     __tablename__ = "users"
@@ -24,15 +16,15 @@ class Users(UserMixin, db.Model):
     password_hash = db.Column(db.String)
     phonenumber = db.Column(db.String(18), index=True, unique=True)
     is_admin = db.Column(db.Boolean, default=False)
+
     # user and order relationship is a one to many
-    order = db.relationship("Orders", backref='ordered_products')
+    order = db.relationship('Orders', backref='user')
 
     # user and kart is one to one relationship
-    kart = db.relationship('Kart', uselist=False, backref='user_kart')
+    kart = db.relationship('Kart', uselist=False, backref='user')
+
     # one to many relationships with Shipping info
-    # change role
-    shipping_info = db.relationship(
-        'ShippingInfo', backref='shipping', lazy='dynamic')
+    shipping_info = db.relationship('Shipping', backref='user', lazy='dynamic')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -62,8 +54,8 @@ def load_user(id):
     return Users.query.get(int(id))
 
 
-class ShippingInfo(db.Model):
-    __tablename__ = "shippinginfo"
+class Shipping(db.Model):
+    __tablename__ = "shipping"
     id = db.Column(db.Integer, primary_key=True)
     address = db.Column(db.String(200), index=True)
     aditional_indications = db.Column(db.String(200), index=True)
@@ -72,10 +64,10 @@ class ShippingInfo(db.Model):
     state = db.Column(db.String(24), index=True)
     country = db.Column(db.String(24), index=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    orders = db.relationship('Orders', backref="orders_shipping")
+    order = db.relationship('Orders', uselist=False, backref='shipping')
 
     def __repr__(self):
-        return '<ShippingInfo {}>'.format(self.address1)
+        return '<Shipping {}>'.format(self.address1)
 
 
 class Organizaciones(db.Model):
@@ -86,7 +78,7 @@ class Organizaciones(db.Model):
     organizacion_location = db.Column(db.String(120))
     organizacion_phone = db.Column(db.String(15))
     # one to many relationship btwn organizaciones and products
-    product = db.relationship('Products', backref='products_organizaciones')
+    product = db.relationship('Products', backref='organizacion')
 
     def __repr__(self):
         return f'<Organizacion {self.organizacion_name} {self.organizacion_location} {self.organizacion_image} {self.organizacion_phone}>'
@@ -125,10 +117,11 @@ class Kart(db.Model):
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
     product = db.relationship('Products', uselist=False)
     quantity = db.Column(db.Integer)
-    subtotal = db.Column(db.Integer)
+    subtotal = db.Column(db.Integer) # TODO: Esto se puede quitar
     # user and kart is one to one relationship
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    user = db.relationship('Users', uselist=False, backref='users')
+
+    order = db.relationship('Orders', uselist=False, backref='kart')
 
     def __repr__(self):
         return '<Cart {}>'.format(self.id)
@@ -137,13 +130,10 @@ class Kart(db.Model):
 class Orders(db.Model):
     __tablename__ = 'orders'
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    user = db.relationship('Users', uselist=False)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    shippinginfo_id = db.Column(db.Integer, db.ForeignKey('shippinginfo.id'))
-    shippinginfo = db.relationship('ShippingInfo', uselist=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    shipping_id = db.Column(db.Integer, db.ForeignKey('shipping.id'))
     kart_id = db.Column(db.Integer, db.ForeignKey('kart.id'))
-    kart = db.relationship('Kart', uselist=False)
 
     def __repr__(self):
         return '<Orders {}>'.format(self.timestamp)
