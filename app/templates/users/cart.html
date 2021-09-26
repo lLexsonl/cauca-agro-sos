@@ -105,6 +105,35 @@
             </button>
           </div>
           <div class="modal-body">
+
+            {% if user %}
+            <div class="container">
+             <fieldset>
+                <legend>User Details</legend>  
+                <ul class="list-group">
+                  <li class="list-group-item">{{user.firstname}}</li>
+                  <li class="list-group-item">{{user.lastname}}</li>
+                  <li class="list-group-item">{{user.email}}</li>
+                  <li class="list-group-item">{{user.phonenumber}}</li>
+                </ul>
+              </fieldset>
+            </div>
+            {% endif %}
+
+            {% if shipping %}
+            <div class="container">
+             <fieldset>
+                <legend>Shipping Details</legend>  
+                <ul class="list-group">
+                  <li class="list-group-item">{{shipping.address}}</li>
+                  <li class="list-group-item">{{shipping.aditional_indications}}</li>
+                  <li class="list-group-item">{{shipping.postcode }}</li>
+                  <li class="list-group-item">{{shipping.city}}, {{shipping.state}}</li>
+                  <li class="list-group-item">{{shipping.country}} </li>
+                </ul>
+              </fieldset>
+            </div>
+            {% endif %}
           
             <div class="container d-flex justify-content-center align-items-center">
               <span class="m-2"><strong>Subtotal</strong>: {{items_subtotals}}</span>
@@ -115,7 +144,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <a href="{{ url_for('home.homepage') }}" class="btn btn-outline-primary">Finalizar Compra</a>
+            <a href="{{ url_for('users.order', user=user.id, shipping=shipping.id, kart=items_subtotals + price) }}" class="btn btn-outline-primary">Finalizar Compra</a>
           </div>
         </div>
       </div>

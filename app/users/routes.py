@@ -14,6 +14,7 @@ from app.users.forms import (ShippingForm, RequestResetForm, ResetPasswordForm,
 from app import db, mail
 from flask_mail import Message
 from random import randint
+
 users = Blueprint('users', __name__)
 
 
@@ -41,34 +42,37 @@ def subtotals():
     return subtotals
 
 
-@users.route('/test')
-def testcart():
-    return render_template('testcart.html')
-
-
 @users.route('/cart', methods=["GET", "POST"])
 def cart():
     if current_user.is_anonymous:
         count = 0
         user = 0
         cartlist = []
+        shippingInfo = None
     else:
         user = current_user.id
+        user_ifo = Users.query.get(user);
         count = Kart.query.filter_by(user_id=user).count()
         cartlist = Kart.query.filter_by(user_id=user).all()
+        shippingInfo = ShippingInfo.query.filter_by(user_id=user).first()
 
     form = CartForm()
 
     price = ShippingPrice()
     items_subtotals = subtotals()
+
+    if shippingInfo is None:
+        flash('Please fill shipping information.')
+        return redirect(url_for('users.profile'))
+
     # for annoymous users
     if current_user.is_anonymous:
         flash('Please login or register to be able to add a shipping address')
         return render_template('users/cart.html', count=count, cartlist=cartlist,
-                               title="Cart", form=form, price=price, items_subtotals=items_subtotals)
+                               title="Cart", form=form, price=price, items_subtotals=items_subtotals, shipping=shippingInfo)
 
     return render_template('users/cart.html', count=count, cartlist=cartlist,
-                           title="Cart", form=form, price=price, items_subtotals=items_subtotals)
+                           title="Cart", form=form, price=price, items_subtotals=items_subtotals, shipping=shippingInfo, user=user_ifo)
 
 
 @users.route('/cart/update/<int:id>', methods=["POST"])
@@ -101,6 +105,16 @@ These items will be shipped withing 48hours, Thank you.
 If you did not make this request simply ignore this request and no changes will be made.
 '''
     mail.send(msg)
+
+
+@login_required
+@users.route('/order/<int:user>/<int:shipping>/<int:kart>', methods=["GET", "POST"])
+def order(user, shipping, kart):
+
+    order = Orders(user_id=user, shippinginfo_id=shipping, kart_id=kart)
+    db.session.add(order)
+    db.session.commit()
+    return redirect(url_for('users.profile'))
 
 
 @login_required
@@ -141,22 +155,22 @@ def profile():
     else:
         user = current_user.id
         count = Kart.query.filter_by(user_id=user).count()
-        order = Orders.query.filter_by(user_id=user)
+        orders = Orders.query.filter_by(user_id=user).all()
         items = Kart.query.filter_by(user_id=user).all()
 
     form = ShippingForm()
-    shipping = ShippingInfo.query.all()
+    shipping = ShippingInfo.query.filter_by(user_id=user).all()
     if form.validate_on_submit():
-        info = ShippingInfo(address1=form.address1.data, address2=form.address2.data,
+        info = ShippingInfo(address=form.address.data, aditional_indications=form.additional.data,
                             postcode=form.postcode.data, city=form.city.data,
-                            state=form.state.data, country=request.form['country'])
+                            state=form.state.data, country=request.form['country'], user_id=user)
         db.session.add(info)
         db.session.commit()
         gc.collect()
         flash('Shipping information was submitted successfully', 'success')
         return redirect(url_for('users.profile'))
     return render_template('users/profile.html', title="Account page", form=form,
-                           shipping=shipping, count=count, order=order, items=items)
+                           shipping=shipping, count=count, orders=orders, items=items)
 
 
 def send_reset_email(user):

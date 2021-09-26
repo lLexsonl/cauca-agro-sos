@@ -13,8 +13,8 @@ class CartForm(FlaskForm):
 
 
 class ShippingForm(FlaskForm):
-    address1 = StringField('Primary Address', validators=[DataRequired()])
-    address2 = StringField('Secondary Address', validators=[DataRequired()])
+    address = StringField('Primary Address', validators=[DataRequired()])
+    additional = StringField('Additional Information', validators=[DataRequired()])
     postcode = IntegerField('Postal code', validators=[DataRequired()])
     city = StringField('City', validators=[DataRequired()])
     state = StringField('State', validators=[DataRequired()])

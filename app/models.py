@@ -65,13 +65,14 @@ def load_user(id):
 class ShippingInfo(db.Model):
     __tablename__ = "shippinginfo"
     id = db.Column(db.Integer, primary_key=True)
-    address1 = db.Column(db.String(200), index=True)
-    address2 = db.Column(db.String(200), index=True)
+    address = db.Column(db.String(200), index=True)
+    aditional_indications = db.Column(db.String(200), index=True)
     postcode = db.Column(db.String(12), index=True)
     city = db.Column(db.String(24), index=True)
     state = db.Column(db.String(24), index=True)
     country = db.Column(db.String(24), index=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    orders = db.relationship('Orders', backref="orders_shipping")
 
     def __repr__(self):
         return '<ShippingInfo {}>'.format(self.address1)
@@ -114,14 +115,12 @@ class Products(db.Model):
     promotion_value = db.Column(db.Integer, index=True)
     organizacion_id = db.Column(db.Integer, db.ForeignKey('organizaciones.id'))
 
-    order = db.relationship(
-        'Orders', secondary=association_table, backref='my_orders', lazy='dynamic')
-
     def __repr__(self):
         return '<Product {}>'.format(self.product_name)
 
 
 class Kart(db.Model):
+    __tablename__ = 'kart'
     id = db.Column(db.Integer, primary_key=True)
     product_id = db.Column(db.Integer, db.ForeignKey('products.id'))
     product = db.relationship('Products', uselist=False)
@@ -138,10 +137,13 @@ class Kart(db.Model):
 class Orders(db.Model):
     __tablename__ = 'orders'
     id = db.Column(db.Integer, primary_key=True)
-    order_ref = db.Column(db.Integer, index=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship('Users', uselist=False)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
+    shippinginfo_id = db.Column(db.Integer, db.ForeignKey('shippinginfo.id'))
+    shippinginfo = db.relationship('ShippingInfo', uselist=False)
+    kart_id = db.Column(db.Integer, db.ForeignKey('kart.id'))
+    kart = db.relationship('Kart', uselist=False)
 
     def __repr__(self):
         return '<Orders {}>'.format(self.timestamp)
