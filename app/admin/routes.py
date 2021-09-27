@@ -511,6 +511,9 @@ def edit_evento(id):
 
         return redirect(url_for('admin.list_eventos'))
 
+    form.name.data = evento.evento_name 
+    form.lat.data = evento.evento_lat 
+    form.long.data = evento.evento_long 
     return render_template('admin/eventos/evento.html', action="Edit",
                            add_evento=add_evento, form=form,
                            evento=evento, title="Edit Evento")

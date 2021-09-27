@@ -24,12 +24,13 @@
               <thead>
 
                 <tr>
-                  <th width="10%"> Organizacion</th>
-                  <th width="15%"> Name</th>
-                  <th width="36%"> Description </th>
-                  <th width="12%"> Product's Stock </th>
-                  <th width="12%"> Edit </th>
-                  <th width="15%"> Delete </th>
+                  <th> Organizacion</th>
+                  <th> Name</th>
+                  <th> Description </th>
+                  <th> Product's Stock </th>
+                  <th> Price </th>
+                  <th> Edit </th>
+                  <th> Delete </th>
                 </tr>
               </thead>
               <tbody>
@@ -38,14 +39,8 @@
                   <td>{{ product.organizacion.organizacion_name}} </td>
                   <td> {{ product.product_name }} </td>
                   <td> {{ product.product_description }} </td>
-                  <td>
-        
-                    {% if product %}
-                      {{ product.product_stock }}
-                    {% else %}
-                      0
-                    {% endif %}
-                  </td>
+                  <td> {{ product.product_stock }} </td>
+                  <td> {{ product.product_price }} </td>
                   <td>
                     <a href="{{ url_for('admin.edit_product', id=product.id) }}">
                       <i class="fa fa-pencil"></i> Edit 
@@ -53,7 +48,7 @@
                   </td>
                   <td>
                     <a href="{{ url_for('admin.delete_product', id=product.id) }}">
-                      <i class="fa fa-trash"></i> Delete 
+                      <i class="fa fa-trash" aria-hidden="true"></i> Delete 
                     </a>
                   </td>
                 </tr>

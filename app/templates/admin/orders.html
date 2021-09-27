@@ -3,32 +3,33 @@
 
 {% block body %}
 
-{% for orders in orders%}
-
 
 <table class="table table-borderless">
-          <tr>
-              <th>User Details</th>
-            <td>{{ orders.user.firstname}} {{ orders.user.lastname}}</td>
-            <td>{{ orders.user.email}}</td>
 
-            <td>{{orders.timestamp.strftime('%d-%m-%Y, %H:%M:%S')}}</td>
-          </tr>
-          <tr>
-              <th>Items ordered</th>
-                    
-                <ul>
-                    <td>
-                            {% for i in orders.my_orders%}
-                        
-                            <li>{{ i.product_name}}</li>
-                            {% endfor %}
-                    </td>
-                </ul>
+        <table class="table table-striped table-bordered">
+          <thead>
+            <tr>
+              <th> Order Number </th>
+              <th> User </th>
+              <th> Date </th>
+              <th> Product </th>
+              <th> Total </th>
+              <th> Address </th>
+            </tr>
+          </thead>
+          <tbody>
 
-          </tr>
-        </tbody>
-      </table> 
-{%endfor%}
+          {% for order in orders %}
+            <tr>
+              <td> {{ order.id }} </td>
+              <td> {{ order.user.email }} </td>
+              <td> {{ order.timestamp.strftime('%d-%m-%Y, %H:%M:%S') }} </td>
+              <td> {{ order.purchase.product.product_name }} </td>
+              <td>  {{ order.purchase.subtotal }} </td>
+              <td>{{ order.shipping.address }}</td>
+            </tr>
+          {%endfor%}
+          </tbody>
+        </table>
 
 {% endblock body %}
