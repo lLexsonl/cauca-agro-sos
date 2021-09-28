@@ -29,6 +29,7 @@ def landing():
 @home.route('/home', methods=['GET'])
 def homepage():
     products = Products.query.all()
+    products = [product for product in products if product.promotion_value > 0]
 
     if current_user.is_anonymous:
         count = 0
@@ -36,7 +37,7 @@ def homepage():
         count = Kart.query.filter_by(user_id=current_user.id).count()
 
     return render_template("home/index.html", title='Website name',
-                           products=products, count=count, len=len(products))
+                           products=products, count=count, size=len(products))
 
 
 @home.route('/canasta')
