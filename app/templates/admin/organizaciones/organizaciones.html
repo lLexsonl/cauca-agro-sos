@@ -26,7 +26,9 @@
                 <tr>
                   <th> Id </th>
                   <th> Name </th>
-                  <th> Products</th>
+                  <th> Ubicaci&oacute;n </th>
+                  <th> Productos</th>
+                  <th> Tel&eacute;fono </th>
                   <th> Edit </th>
                   <th> Delete </th>
                 </tr>
@@ -35,7 +37,9 @@
               {% for organizacion in organizaciones %}
                 <tr>
                   <td> {{ organizacion.id}} </td>
-                  <td> {{ organizacion.organizacion_name}} </td>
+                  <td> {{ organizacion.organizacion_name }} </td>
+                  <td> {{ organizacion.organizacion_location }} </td>
+                  <td> {{ organizacion.organizacion_phone }} </td>
                   <!-- add a organizacion description if needed -->
                     {% if organizacion.product == [] %}
                     <td>

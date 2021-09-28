@@ -173,7 +173,6 @@
 /* from materialize.css*/
 img.responsive-img, video.responsive-video {
     max-width: 100%;
-    height: 12rem;
 }
 
 .card-panel{
@@ -195,11 +194,6 @@ img.responsive-img, video.responsive-video {
     box-shadow:0 8px 17px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19)
 }
 
-.col .row {
-    margin-left: -0.75rem;
-    margin-right: -0.75rem;
-  }
-  
   .section {
     padding-top: 1rem;
     padding-bottom: 1rem;
@@ -215,12 +209,6 @@ img.responsive-img, video.responsive-video {
   
   .section.no-pad-top {
     padding-top: 0;
-  }
-  
-  .row {
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: 20px;
   }
   
   .row:after {

@@ -1,31 +1,37 @@
 {% extends "base.html" %}
 {% block title %}{{ title }}{% endblock title%}
 {% block body %}
-<div class="container-fluid clearfix" style="max-width:90%; margin-left: auto; margin-right: auto;">
-    <div class="float-left" style=" width:50%;">
+
+<div class="container">
+  <div class="row">
+
+    <div class="col d-flex justify-content-center align-items-center">
       <img  class="responsive-img" src="{{ inversionista.inversionista_image }}">
     </div>
-    <div class="float-right" style="width:48%;">
-      <div>
-        <span style="font-size:1.5rem;">
-          <b>{{ inversionista.inversionista_name }}</b>
-        </span>
-        <article>
-          <h5 style="font-size:1.2rem;"><b>Description</b></h5>
-          <p style="font-size:;1rem">
-            <div class="product-description">
-              {{ inversionista.inversionista_desc }}
-          </p>
-          <h5 style="font-size:1.2rem;"><b>Email</b></h5>
-          <p style="font-size:1rem;">
-            </div>
-            <div class="product-description">
-              {{ inversionista.inversionista_email }}
-            </div>
-          </p>
-        </article>
+
+    <div class="col">
+      <div class="row">
+        <div class="col d-flex justify-content-center align-items-center">
+          <h4>{{ inversionista.inversionista_name }}</h4>
+        </div>
       </div>
+
+      <div class="row">
+        <div class="col m-1">
+          <h5 class="m-1">Descripci&oacute;n:</h5>
+          <p class="m-1">{{ inversionista.inversionista_desc }}</p>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col m-1">
+          <h5 class="m-1">Email:</h5>
+          <p class="m-1">{{ inversionista.inversionista_email }}</p>
+        </div
+      </div>
+
     </div>
+  </div>
 </div>
 
 {% endblock %}
