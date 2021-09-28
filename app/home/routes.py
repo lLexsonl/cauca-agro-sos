@@ -58,21 +58,31 @@ def canasta():
 @home.route('/organizacion')
 def organizaciones():
 
+    if current_user.is_anonymous:
+        count = 0
+    else:
+        count = Kart.query.filter_by(user_id=current_user.id).count()
+
     page = request.args.get('page', 1, type=int)
 
     organizaciones = Organizaciones.query\
         .order_by(Organizaciones.organizacion_name).paginate(page=page, per_page=6)
 
-    return render_template("home/organizaciones.html", title="Organizaciones", organizaciones=organizaciones)
+    return render_template("home/organizaciones.html", title="Organizaciones", organizaciones=organizaciones, count=count)
 
 
 @home.route('/organizacion/<int:id>', methods=["GET", "POST"])
 def organizacion_details(id):
 
+    if current_user.is_anonymous:
+        count = 0
+    else:
+        count = Kart.query.filter_by(user_id=current_user.id).count()
+
     organizacion = Organizaciones.query.filter_by(id=id).first_or_404()
 
     return render_template("home/organizacion_details.html",
-                           organizacion=organizacion, title=organizacion.organizacion_name)
+                           organizacion=organizacion, title=organizacion.organizacion_name, count=count)
 
 
 @home.route('/product/<int:id>', methods=["GET", "POST"])
@@ -114,26 +124,43 @@ def product_details(id):
 @home.route('/inversionista')
 def inversionistas():
 
+    if current_user.is_anonymous:
+        count = 0
+    else:
+        count = Kart.query.filter_by(user_id=current_user.id).count()
+
+
     page = request.args.get('page', 1, type=int)
 
     inversionistas = Inversionistas.query\
         .order_by(Inversionistas.inversionista_name).paginate(page=page, per_page=6)
 
-    return render_template("home/inversionistas.html", title="Inversionistas", inversionistas=inversionistas)
+    return render_template("home/inversionistas.html", title="Inversionistas", inversionistas=inversionistas, count=count)
 
 
 @home.route('/inversionista/<int:inversionista_id>', methods=["GET", "POST"])
 def inversionista_details(inversionista_id):
 
+    if current_user.is_anonymous:
+        count = 0
+    else:
+        count = Kart.query.filter_by(user_id=current_user.id).count()
+
     inversionista = Inversionistas.query.filter_by(
         id=inversionista_id).first_or_404()
 
     return render_template("home/inversionista_details.html",
-                           inversionista=inversionista, title=inversionista.inversionista_name)
+                           inversionista=inversionista, title=inversionista.inversionista_name, count=count)
 
 
 @home.route('/eventos', methods=["GET", "POST"])
 def eventos():
+
+    if current_user.is_anonymous:
+        count = 0
+    else:
+        count = Kart.query.filter_by(user_id=current_user.id).count()
+
     long = -76.60631917174642
     lat = 2.4419131406694277
     zoom = 12.5
@@ -143,4 +170,4 @@ def eventos():
         long = form.eventos.data.evento_long
         lat = form.eventos.data.evento_lat
         zoom = 15
-    return render_template("home/eventos.html", title="Eventos", form=form, eventos=eventos, long=long, lat=lat, zoom=zoom)
+    return render_template("home/eventos.html", title="Eventos", form=form, eventos=eventos, long=long, lat=lat, zoom=zoom, count=count)
