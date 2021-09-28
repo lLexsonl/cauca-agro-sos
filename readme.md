@@ -28,7 +28,7 @@ For more information: Python [virtualenvironments](https://docs.python.org/es/3.
 
 ### Warning
 
-  If try to do `flask run` show a **error** related with dependency *Werkzeug==2.0.1*.
+  If try to do `flask run` show an **error** related with dependency *Werkzeug==2.0.1*.
 
   Watch [solution here](https://stackoverflow.com/questions/61628503/flask-uploads-importerror-cannot-import-name-secure-filename) or follow next steps:
 
@@ -36,20 +36,20 @@ For more information: Python [virtualenvironments](https://docs.python.org/es/3.
 
   If you use a virtual environment, look for the file in these possible locations:
 
-    `<venv>/lib/site-packages/flask_uploads.py`
+  `<venv>/lib/site-packages/flask_uploads.py`
   or
-    `<venv>/lib/python3.X/site-packages/flask_uploads.py`
+  `<venv>/lib/python3.X/site-packages/flask_uploads.py`
 
   b. Now, in the **flask-uploads.py** file in the imports part, change
 
-    `from werkzeug import secure_filename,FileStorage`
+  `from werkzeug import secure_filename,FileStorage`
 
-    to
+  to
 
-    ```
-    from werkzeug.utils import secure_filename
-    from werkzeug.datastructures import  FileStorage
-    ```
+  ```
+  from werkzeug.utils import secure_filename
+  from werkzeug.datastructures import  FileStorage
+  ```
 4. Now can start the app doing `flask run`
 
 # For login as admin
