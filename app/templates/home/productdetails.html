@@ -4,52 +4,52 @@
 {% if product_detail %}
 
 <div class="container mt-1 mb-3"
-  <div class="card" style="width: 25rem;">
+  <div class="card" style="width: 50%;">
     <img src="{{ product_detail.product_image }}" class="card-img-top" alt="{{ product_detail.name }}">
     <div class="card-body">
       <h5 class="card-title">{{ product_detail.product_name }}</h5>
 
-       <div class="row justify-content-center align-items-center">
-          <div class="col-sm">
-            <h6 class="card-subtitle mt-0">Organizacion</h6>
+       <div class="row m-1 justify-content-center align-items-center">
+          <div class="col m">
+            <h6 class="card-subtitle mt-0">Organizaci&oacute;n</h6>
           </div>
-          <div class="col-sm">
+          <div class="col">
             <a type="button" class="btn btn-outline-info" href="{{ url_for('home.organizacion_details', id=organizacion.id) }} ">
               <p class="card-text mt-0">{{ organizacion.organizacion_name }}</p>
             </a>
           </div>
       </div>
 
-      <div class="row justify-content-center align-items-center">
-          <div class="col-sm">
+      <div class="row m-1 justify-content-center align-items-center">
+          <div class="col">
             <h6 class="card-subtitle mt-0">Stock</h6>
           </div>
-          <div class="col-sm">
+          <div class="col">
             <p class="card-text mt-0">{{ product_detail.product_stock }}</p>
           </div>
       </div>
 
-       <div class="row justify-content-center align-items-center">
-          <div class="col-sm">
-            <h6 class="card-subtitle mt-0">Price</h6>
+       <div class="row m-1 justify-content-center align-items-center">
+          <div class="col">
+            <h6 class="card-subtitle mt-0">Precio</h6>
           </div>
-          <div class="col-sm">
+          <div class="col">
             <p class="card-text mt-0">{{ product_detail.product_price }}</p>
           </div>
       </div>
 
-       <div class="row justify-content-center align-items-center">
-          <div class="col-sm">
-            <h6 class="card-subtitle mt-0">Promotion</h6>
+       <div class="row m-1 justify-content-center align-items-center">
+          <div class="col">
+            <h6 class="card-subtitle mt-0">Promoci&oacute;n</h6>
           </div>
-          <div class="col-sm">
+          <div class="col">
             <p class="card-text mt-0">{{ product_detail.promotion_value }} %</p>
           </div>
       </div>
 
-       <div class="row justify-content-center align-items-center">
+       <div class="row m-1 justify-content-center align-items-center">
           <div class="col-sm">
-            <h6 class="card-subtitle mt-0">Description</h6>
+            <h6 class="card-subtitle mt-0">Descripci&oacute;n</h6>
           </div>
           <div class="col-sm">
             <p class="card-text mt-0">{{ product_detail.product_description }}</p>
@@ -61,7 +61,7 @@
        <div class="row justify-content-center align-items-center m-0">
         <div class="col-sm">
         <div class="m-1 form-group">
-          {{ form.amount.label(class="form-control-label") }}
+          <h6>Cantidad</h6>
         </div>
         </div>
 
