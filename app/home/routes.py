@@ -40,7 +40,7 @@ def homepage():
                            products=products, count=count, size=len(products))
 
 
-@home.route('/canasta')
+@home.route('/productos')
 def canasta():
     if current_user.is_anonymous:
         count = 0
@@ -55,7 +55,7 @@ def canasta():
     return render_template("home/canasta.html", title="Canasta Agricola", products=products, count=count)
 
 
-@home.route('/organizacion')
+@home.route('/organizaciones')
 def organizaciones():
 
     if current_user.is_anonymous:
@@ -71,7 +71,7 @@ def organizaciones():
     return render_template("home/organizaciones.html", title="Organizaciones", organizaciones=organizaciones, count=count)
 
 
-@home.route('/organizacion/<int:id>', methods=["GET", "POST"])
+@home.route('/organizaciones/<int:id>', methods=["GET", "POST"])
 def organizacion_details(id):
 
     if current_user.is_anonymous:
@@ -80,12 +80,13 @@ def organizacion_details(id):
         count = Kart.query.filter_by(user_id=current_user.id).count()
 
     organizacion = Organizaciones.query.filter_by(id=id).first_or_404()
+    products = Products.query.filter_by(organizacion_id=id).all()
 
     return render_template("home/organizacion_details.html",
-                           organizacion=organizacion, title=organizacion.organizacion_name, count=count)
+                           organizacion=organizacion, title=organizacion.organizacion_name, products=products, count=count)
 
 
-@home.route('/product/<int:id>', methods=["GET", "POST"])
+@home.route('/productos/<int:id>', methods=["GET", "POST"])
 def product_details(id):
     if current_user.is_anonymous:
         count = 0
@@ -105,7 +106,7 @@ def product_details(id):
         # annonymous users
         if current_user.is_anonymous:
             flash(
-                'Please login before you can add items to your shopping cart', 'warning')
+                'Por favor, haz login para poder agregar items a tu carrito de compras.', 'warning')
             return redirect(url_for("home.product_details", id=product_detail.id))
         # authenticated users
         subtotal = (int(form.amount.data)) * (product_detail.product_price - (product_detail.product_price * (product_detail.promotion_value/100)))
@@ -121,7 +122,7 @@ def product_details(id):
                            form=form, count=count, organizacion=organizacion)
 
 
-@home.route('/inversionista')
+@home.route('/inversionistas')
 def inversionistas():
 
     if current_user.is_anonymous:
@@ -138,7 +139,7 @@ def inversionistas():
     return render_template("home/inversionistas.html", title="Inversionistas", inversionistas=inversionistas, count=count)
 
 
-@home.route('/inversionista/<int:inversionista_id>', methods=["GET", "POST"])
+@home.route('/inversionistas/<int:inversionista_id>', methods=["GET", "POST"])
 def inversionista_details(inversionista_id):
 
     if current_user.is_anonymous:
