@@ -52,10 +52,10 @@ For more information: Python [virtualenvironments](https://docs.python.org/es/3.
   ```
 4. Now can start the app doing `flask run`
 
-# For login as admin
+# For admin login
   test@g.com
   test123456
 
-# To shop login with
+# For user login
   user@g.com
   user123456
