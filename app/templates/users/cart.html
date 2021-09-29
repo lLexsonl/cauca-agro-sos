@@ -135,17 +135,21 @@
             </div>
             {% endif %}
           
+            {% if items_subtotals > 0 %}
             <div class="container d-flex justify-content-center align-items-center">
               <span class="m-2"><strong>Subtotal</strong>: {{items_subtotals}}</span>
               <span class="m-2"><strong>Shipping</strong>: {{ price }}</span>
               <span class="m-2"><strong>Total</strong>: {{items_subtotals + price}}</span>
             </div>
-
+            {% endif %}
           </div>
+
+          {% if user %}
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             <a href="{{ url_for('users.order', user=user.id, shipping=shipping.id) }}" class="btn btn-outline-primary">Finalizar Compra</a>
           </div>
+          {% endif %}
         </div>
       </div>
     </div>

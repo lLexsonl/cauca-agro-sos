@@ -46,6 +46,7 @@ def cart():
     if current_user.is_anonymous:
         count = 0
         user = 0
+        user_info = None
         cartlist = []
         shipping = None
     else:
@@ -60,15 +61,15 @@ def cart():
     price = ShippingPrice()
     items_subtotals = subtotals()
 
-    if shipping is None:
-        flash('Please fill shipping information.')
-        return redirect(url_for('users.profile'))
-
     # for annoymous users
     if current_user.is_anonymous:
-        flash('Please login or register to be able to add a shipping address')
+        flash('Por favor haz login o registrate para poder utilizar el carrito de compras.')
         return render_template('users/cart.html', count=count, cartlist=cartlist,
                                title="Cart", form=form, price=price, items_subtotals=items_subtotals, shipping=shipping)
+
+    if shipping is None:
+        flash('Por favor rellena la información del evio(shipping).')
+        return redirect(url_for('users.profile'))
 
     return render_template('users/cart.html', count=count, cartlist=cartlist,
                            title="Cart", form=form, price=price, items_subtotals=items_subtotals, shipping=shipping, user=user_info)
