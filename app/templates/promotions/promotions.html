@@ -18,8 +18,22 @@
             <div class="price-container clearfix">
               <span class="price-box" style="margin-bottom:0px;white-space:normal;">
                 <span class="price">
+                  {% if product.promotion_value > 0 %}
+                  <div class="row">
+                    <div class="col">
+                    <span>$<strike>{{ product.product_price }}</strike></span>
+                    </div>
+                    <div class="col">
+                    <span class="product-name">-{{product.promotion_value}}%</span>
+                    </div>
+                    <div class="col">
+                    <span>${{ product.product_price - (product.product_price * product.promotion_value/100) }}</span>
+                    </div>
+                  </div>
+                  {% else %}
                   <span>$</span>
                   <span>{{ product.product_price }}</span>
+                  {% endif %}
                 </span>
               </span>
             </div>
